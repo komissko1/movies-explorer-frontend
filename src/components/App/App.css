@@ -1,0 +1,16 @@
+.root {
+  margin: 0 auto;
+  padding: 0;
+  min-width: 320px;
+  width: 100%;
+  max-width: 1280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Inter, Arial, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  background: #fff;
+  position: relative;
+  box-sizing: border-box;
+}

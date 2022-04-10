@@ -1,0 +1,68 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  color: #A0A0A0;
+  text-align: left;
+  justify-content: space-between;
+  font-size: 10px;
+  line-height: 12px;
+}
+
+.form__logo {
+  margin: 0;
+  width: 38px;
+  opacity: 1;
+  transition: opacity .5s ease-in-out;
+}
+
+.form__title {
+  text-align: left;
+  margin: 40px 0;
+  color: #000;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 29px;
+}
+
+.form__elements {
+  display: flex;
+  flex-direction: column;
+}
+
+  .form__input {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 32px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 1px solid #E8E8E8;
+  }
+
+  .form__input:focus {
+    border: 1px solid #2BE080;
+    ;
+  }
+
+  .form__input-error {
+    width: 100%;
+    padding: 6px 0;
+    display: inline-block;
+    opacity: 1;
+    color: #FF0000;
+  }
+
+.form__save-button {
+  padding: 14px 0;
+  color: #ffffff;
+  border-style: none;
+  background: #FF6838;
+  border-radius: 3px;
+  font-size: 18px;
+  line-height: 22px;
+  transition: opacity .3s ease-in-out;
+}

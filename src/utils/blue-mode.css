@@ -1,0 +1,16 @@
+.blue-mode {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  background: #465DFF;
+  text-decoration: none;
+  color: white;
+}
+
+.blue-mode a{
+  color: white;
+}
+
+/* .blue-mode li:hover{
+  opacity: 0.6;
+} */

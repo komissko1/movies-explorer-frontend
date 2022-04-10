@@ -1,0 +1,28 @@
+.login-container {
+  margin: 0;
+  padding-top: 70px;
+  width: 396px;
+  height: calc(100vh - 70px);
+  display: flex;
+  flex-direction: column;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  color: #A0A0A0;
+}
+
+  .login-container__bottom-text{
+    margin: 0;
+    padding: 16px 0 70px;
+    align-self:bottom;
+  }
+
+  .login-container__link{
+    margin: 0;
+    text-decoration: none;
+    opacity: 1;
+    transition: opacity .5s ease-in-out;
+    color: #FF6838;
+  }
+

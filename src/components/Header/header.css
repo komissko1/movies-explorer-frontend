@@ -1,0 +1,53 @@
+.header {
+  margin: 0;
+  padding: 0 70px;
+  width: 100%;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: auto min-content min-content;
+  white-space: nowrap;
+  align-items: center;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.header__logo {
+  margin: 18px 0;
+  width: 38px;
+  opacity: 1;
+  transition: opacity .5s ease-in-out;
+}
+
+.header__account {
+  margin-left: 50px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  align-items: center;
+  display: flex;
+  opacity: 1;
+  transition: opacity .5s ease-in-out;
+  text-decoration: none;
+  color: black;
+}
+
+.header__account-pic {
+  margin-left: 17px;
+  padding: 7px;
+  background: #F9F9F9;
+  border-radius: 4px;
+}
+
+.header__login-link {
+  margin-left: 30px;
+  padding: 8px 20px;
+  color: #000;
+  border-style: none;
+  text-decoration: none;
+  background: #2BE080;
+  border-radius: 3px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  transition: opacity .3s ease-in-out;
+}
