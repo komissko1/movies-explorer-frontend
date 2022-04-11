@@ -33,12 +33,3 @@
   src: url("./fonts/Inter-Bold.woff2") format("woff2"),
        url("./fonts/Inter-Bold.woff") format("woff");
 }
-
-@font-face {
-  font-family: 'Suisse Intl';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("./fonts/SuisseIntl-Regular.woff2") format("woff2"),
-       url("./fonts/SuisseIntl-Regular.woff") format("woff");
-}

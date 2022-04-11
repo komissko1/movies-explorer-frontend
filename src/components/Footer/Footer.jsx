@@ -12,13 +12,13 @@ function Footer(props) {
         &copy; 2022
         <ul className="footer__links">
           <li className="footer__link link-effect">
-            <Link to="/sign-in">Яндекс.Практикум</Link>
+            <a href="https://practicum.yandex.ru/">Яндекс.Практикум</a>
           </li>
           <li className="footer__link link-effect">
-            <Link to="/sign-in">Github</Link>
+            <a href="https://github.com">Github</a>
           </li>
           <li className="footer__link link-effect">
-            <Link to="/sign-in">Facebook</Link>
+            <a href="https://www.facebook.com">Facebook</a>
           </li>
         </ul>
       </div>

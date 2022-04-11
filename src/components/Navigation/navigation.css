@@ -4,6 +4,7 @@
   display: flex;
   width: min-content;
   list-style-type: none;
+  gap: 20px;
 }
 
 .navBar__link{
@@ -12,12 +13,7 @@
 }
 
 .navBar li{
-  margin-right: 20px;
   opacity: 1;
   transition: opacity .5s ease-in-out;
-}
-
-.navBar li:last-child {
-  margin-right: 0;
 }
 
