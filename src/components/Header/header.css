@@ -38,6 +38,12 @@
   border-radius: 4px;
 }
 
+.header__navBar-button {
+  width: 44px;
+  opacity: 1;
+  transition: opacity .5s ease-in-out;
+}
+
 .header__login-link {
   margin-left: 30px;
   padding: 8px 20px;
@@ -50,4 +56,16 @@
   font-size: 14px;
   line-height: 16px;
   transition: opacity .3s ease-in-out;
+}
+
+@media screen and (max-width: 768px) {
+  .header {
+    padding: 0 30px;
+    font-size: 12px;
+    line-height: 16px;
+  }
+
+  .header__login-link {
+    font-size: 12px;
+  }
 }

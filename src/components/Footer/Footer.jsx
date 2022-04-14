@@ -5,11 +5,11 @@ import Navigation from "../Navigation/Navigation";
 function Footer(props) {
   return (
     <footer className="footer">
-      <p3 href="https://yandex.ru/" className="footer__title">
+      <h3 href="https://yandex.ru/" className="footer__title">
         Учебный проект Яндекс.Практикум х Gdzenn.
-      </p3>
+      </h3>
       <div className="footer__bottom-line">
-        &copy; 2022
+        <div className="footer__copyright">&copy; 2022</div>
         <ul className="footer__links">
           <li className="footer__link link-effect">
             <a href="https://practicum.yandex.ru/">Яндекс.Практикум</a>

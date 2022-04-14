@@ -1,14 +1,13 @@
 .aboutProject {
-  padding: 0 70px;
+  padding: 110px 70px;
   display: flex;
-  flex-flow: wrap;
-  justify-content: space-between;
+  flex-direction: column;
 }
 
 .aboutProject__header {
   margin: 0;
   width: 100%;
-  padding: 110px 0 23px;
+  padding-bottom: 23px;
   font-weight: 400;
   font-size: 22px;
   line-height: 27px;
@@ -17,13 +16,15 @@
 }
 
 .aboutProject__cards {
-  display: flex;
+  padding: 70px 0 110px;
+  width: 100%;
+  display: grid;
+  grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
   gap: 40px;
-  flex-shrink: 1;
 }
 
 .aboutProject__card {
-  padding-top: 70px;
+  display: block;
 }
 
 .aboutProject__card-title {
@@ -41,7 +42,6 @@
 }
 
 .aboutProject__timing {
-  padding: 110px 0;
   width: 100%;
   display: grid;
   text-align: center;
@@ -70,4 +70,55 @@
   padding: 14px 0 0;
   font-weight: 500;
   color: #A0A0A0;
+}
+
+@media screen and (max-width: 768px) {
+  .aboutProject {
+    padding: 90px 50px;
+  }
+
+  .aboutProject__cards {
+    padding-top: 70px 0 93px;
+    gap: 30px;
+  }
+
+  .aboutProject__card-text {
+    padding-top: 22px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .aboutProject {
+    padding: 70px 18px;
+  }
+
+  .aboutProject__header {
+    padding-bottom: 28px;
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  .aboutProject__cards {
+    padding: 60px 0;
+    gap: 56px;
+  }
+
+  .aboutProject__card-title {
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  .aboutProject__card-text {
+    padding-top: 16px;
+    font-size: 11px;
+    line-height: 16px;
+  }
+
+  .aboutProject__timing {
+    font-size: 11px;
+    line-height: 13px;
+    grid-template-rows: 35px 23px;
+  }
 }
