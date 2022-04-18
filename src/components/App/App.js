@@ -10,8 +10,9 @@ import Login from "../Login/Login";
 import Register from "../Register/Register";
 import PageNotFound from "../PageNotFound/PageNotFound";
 import Header from "../Header/Header";
-import Preloader from "../Preloader/Preloader";
 import Main from "../Main/Main";
+import Movies from "../Movies/Movies";
+import SavedMovies from "../Movies/SavedMovies/SavedMovies";
 import Profile from "../Profile/Profile";
 import Footer from "../Footer/Footer";
 import PopupMenu from "../PopupMenu/PopupMenu";
@@ -39,7 +40,7 @@ function App() {
 
   return (
     // <CurrentUserContext.Provider value={currentUser}>
-    <div className="root">
+    <div className="root__container">
       <Routes>
         <Route path="/signin" element={<Login />} />
         <Route path="/signup" element={<Register />} />
@@ -59,8 +60,7 @@ function App() {
           element={
             <ProtectedRoute loggedIn={isLoggedIn}>
               <Header loggedIn={isLoggedIn} onClick={handleMenuClick}/>
-              <Preloader />
-              {/* <Main /> */}
+              <Movies />
               <Footer />
             </ProtectedRoute>
           }
@@ -70,8 +70,7 @@ function App() {
           element={
             <ProtectedRoute loggedIn={isLoggedIn}>
               <Header loggedIn={isLoggedIn} onClick={handleMenuClick}/>
-              <Preloader />
-              {/* <Main /> */}
+              <SavedMovies />
               <Footer />
             </ProtectedRoute>
           }

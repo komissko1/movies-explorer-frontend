@@ -1,5 +1,5 @@
 .portfolio {
-  padding: 0 70px 105px;
+  padding: 0 calc(50px + (70 - 50) * (100% - 768px) / (1280 - 768)) 105px;
   display: flex;
   flex-direction: column;
 }
