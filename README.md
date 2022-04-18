@@ -1,2 +1,4 @@
 # movies-explorer-frontend
-Diploma front-end
+## Дипломная работа
+
+## [Diploma front-end URL](https://movies-explorer.kkom.nomoredomains.work)
