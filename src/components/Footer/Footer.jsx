@@ -1,6 +1,4 @@
 import React from "react";
-import { Link, Routes, Route } from "react-router-dom";
-import Navigation from "../Navigation/Navigation";
 
 function Footer(props) {
   return (
@@ -12,13 +10,13 @@ function Footer(props) {
         <div className="footer__copyright">&copy; 2022</div>
         <ul className="footer__links">
           <li className="footer__link link-effect">
-            <a href="https://practicum.yandex.ru/">Яндекс.Практикум</a>
+            <a href="https://practicum.yandex.ru/" target="_blank" rel="noreferrer noopener">Яндекс.Практикум</a>
           </li>
           <li className="footer__link link-effect">
-            <a href="https://github.com">Github</a>
+            <a href="https://github.com" target="_blank" rel="noreferrer noopener">Github</a>
           </li>
           <li className="footer__link link-effect">
-            <a href="https://www.facebook.com">Facebook</a>
+            <a href="https://www.facebook.com" target="_blank" rel="noreferrer noopener">Facebook</a>
           </li>
         </ul>
       </div>

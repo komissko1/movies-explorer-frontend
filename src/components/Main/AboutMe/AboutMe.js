@@ -20,10 +20,10 @@ function AboutMe() {
           </p>
           <ul className="aboutMe__links">
             <li>
-              <a href="https://www.facebook.com" className="aboutMe__link link-effect">Facebook</a>
+              <a href="https://www.facebook.com" target="_blank" rel="noreferrer noopener" className="aboutMe__link link-effect">Facebook</a>
             </li>
             <li>
-              <a href="https://github.com" className="aboutMe__link link-effect">Github</a>
+              <a href="https://github.com" target="_blank" rel="noreferrer noopener" className="aboutMe__link link-effect">Github</a>
             </li>
           </ul>
         </div>

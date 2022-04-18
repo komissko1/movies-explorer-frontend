@@ -1,11 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import logoPath from "../../images/logo.svg";
-import navButton from "../../images/navTabButton.png";
-import navButton_bluemode from "../../images/navTabButton_bluemode.png";
+import navButton from "../../images/navTabButton.svg";
+import navButton_bluemode from "../../images/navTabButton_bluemode.svg";
 import accountPath from "../../images/account.svg";
 import Navigation from "../Navigation/Navigation";
-// import PopupMenu from "../PopupMenu/PopupMenu";
 
 function Header(props) {
   const [windowSize, setwindowSize] = React.useState(window.innerWidth);

@@ -25,71 +25,74 @@ function App() {
   // const [currentUser, setCurrentUser] = React.useState({name: 'sasa'});
   const [popupMenuState, setPopupMenuState] = React.useState(false);
   const [isLoggedIn, setIsLoggedIn] = React.useState(true);
-  const location = useLocation();
+  // const location = useLocation();
   // const navigate = useNavigate();
 
-
   function handleMenuClick() {
-    setPopupMenuState(!setIsLoggedIn);
+    setPopupMenuState(!popupMenuState);
   }
 
   function closePopup() {
-    setPopupMenuState(!setIsLoggedIn);
+    setPopupMenuState(!popupMenuState);
   }
 
-
   return (
-    // <CurrentUserContext.Provider value={currentUser}>
-    <div className="root__container">
-      <Routes>
-        <Route path="/signin" element={<Login />} />
-        <Route path="/signup" element={<Register />} />
-        <Route path="/404" element={<PageNotFound />} />
-        <Route
-          path="/"
-          element={
-            <>
-              <Header loggedIn={isLoggedIn} mode="bluemode" onClick={handleMenuClick}/>
-              <Main />
-              <Footer />
-            </>
-          }
-        />
-        <Route
-          path="/movies"
-          element={
-            <ProtectedRoute loggedIn={isLoggedIn}>
-              <Header loggedIn={isLoggedIn} onClick={handleMenuClick}/>
-              <Movies />
-              <Footer />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/saved-movies"
-          element={
-            <ProtectedRoute loggedIn={isLoggedIn}>
-              <Header loggedIn={isLoggedIn} onClick={handleMenuClick}/>
-              <SavedMovies />
-              <Footer />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute loggedIn={isLoggedIn}>
-              <Header loggedIn={isLoggedIn} onClick={handleMenuClick}/>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="*" element={<Navigate to="/404" />} />
-      </Routes>
+    <>
+    {/* <CurrentUserContext.Provider value={currentUser}> */}
+      <div className="root__container">
+        <Routes>
+          <Route path="/signin" element={<Login />} />
+          <Route path="/signup" element={<Register />} />
+          <Route path="/404" element={<PageNotFound />} />
+          <Route
+            path="/"
+            element={
+              <>
+                <Header
+                  loggedIn={isLoggedIn}
+                  mode="bluemode"
+                  onClick={handleMenuClick}
+                />
+                <Main />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="/movies"
+            element={
+              <ProtectedRoute loggedIn={isLoggedIn}>
+                <Header loggedIn={isLoggedIn} onClick={handleMenuClick} />
+                <Movies />
+                <Footer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/saved-movies"
+            element={
+              <ProtectedRoute loggedIn={isLoggedIn}>
+                <Header loggedIn={isLoggedIn} onClick={handleMenuClick} />
+                <SavedMovies />
+                <Footer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute loggedIn={isLoggedIn}>
+                <Header loggedIn={isLoggedIn} onClick={handleMenuClick} />
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<Navigate to="/404" />} />
+        </Routes>
       <PopupMenu isOpen={popupMenuState} onClose={closePopup} />
-    </div>
-
-    // </CurrentUserContext.Provider>
+      </div>
+    {/* </CurrentUserContext.Provider> */}
+    </>
   );
 }
 
