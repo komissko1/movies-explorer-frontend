@@ -16,46 +16,49 @@ function PopupMenu({ isOpen, onClose }) {
     return () => document.removeEventListener("keydown", closeByEscape);
   }, [isOpen, onClose]);
 
+  const handleOverlay = (e) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <dir className={`popupMenu ${isOpen ? "popupMenu_opened" : ""}`}>
-      <img
-        className="popupMenu__close-button link-effect"
-        src={closeIcon}
-        alt="Закрыть"
-        onClick={onClose}
-      />
-      <>
-        <ul className="popupMenu__items">
-          <li className="link-effect">
-            <Link
-              to="/"
-              className={'popupMenu__link'}
-            >
-              Главная
-            </Link>
-          </li>
-          <li className="link-effect">
-            <Link
-              to="/movies"
-              className={'popupMenu__link'}
-            >
-              Фильмы
-            </Link>
-          </li>
-          <li className="link-effect">
-            <Link
-              to="/saved-movies"
-              className={'popupMenu__link'}
-            >
-              Сохраненные фильмы
-            </Link>
-          </li>
-        </ul>
-        <Link to="/profile" className="popupMenu__account link-effect">
-          Аккаунт
-          <img className="popupMenu__account-pic" src={accountPath} alt="Профиль" />
-        </Link>
-      </>
+    <dir className={`popupMenu ${isOpen ? "popupMenu_opened" : ""}`} onClick={handleOverlay}>
+      <dir className="popupMenu__container">
+        <img
+          className="popupMenu__close-button link-effect"
+          src={closeIcon}
+          alt="Закрыть"
+          onClick={onClose}
+        />
+        <>
+          <ul className="popupMenu__items">
+            <li className="link-effect">
+              <Link to="/" className={"popupMenu__link"}>
+                Главная
+              </Link>
+            </li>
+            <li className="link-effect">
+              <Link to="/movies" className={"popupMenu__link"}>
+                Фильмы
+              </Link>
+            </li>
+            <li className="link-effect">
+              <Link to="/saved-movies" className={"popupMenu__link"}>
+                Сохраненные фильмы
+              </Link>
+            </li>
+          </ul>
+          <Link to="/profile" className="popupMenu__account link-effect">
+            Аккаунт
+            <img
+              className="popupMenu__account-pic"
+              src={accountPath}
+              alt="Профиль"
+            />
+          </Link>
+        </>
+      </dir>
     </dir>
   );
 }

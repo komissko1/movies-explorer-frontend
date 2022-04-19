@@ -11,7 +11,7 @@ function SearchForm() {
           type="text"
           id="movie"
           minLength="3"
-          maxLength="20"
+          maxLength="50"
           placeholder="Фильм"
           required
         />

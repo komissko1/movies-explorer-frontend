@@ -44,6 +44,7 @@
   line-height: 0;
   opacity: 1;
   transition: opacity .5s ease-in-out;
+  cursor: pointer;
 }
 
 .header__login-link {
