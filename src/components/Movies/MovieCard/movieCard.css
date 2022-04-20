@@ -1,6 +1,7 @@
 .card {
   box-sizing: border-box;
   max-width: 360px;
+  flex: 1 0 342px;
   display: flex;
   flex-direction: column;
   background: #FDFDFD;
@@ -76,8 +77,8 @@
 
 @media screen and (max-width: 768px) {
   .card {
-    max-width: 360px;
-    min-width: 300px;
+    max-width: 342px;
+    flex: 1 0 300px;
   }
 }
 
@@ -89,8 +90,9 @@
   .card__title {
     font-size: 12px;
   }
-    .card__length {
-      font-size: 10px;
+
+  .card__length {
+    font-size: 10px;
   }
 
   .card__bottom {

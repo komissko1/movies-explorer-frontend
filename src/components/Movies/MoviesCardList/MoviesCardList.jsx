@@ -28,15 +28,16 @@ function MoviesCardList(props) {
               />
             ))}
       </section>
-      {props.savedOnly ? (
-        ""
-      ) : (
-        <section className="cardList__addCards">
-          <button type="button" className="cardList__button">
-            Ещё
-          </button>
-        </section>
-      )}
+      <section className="cardList__addCards">
+        <button
+          type="button"
+          className={`cardList__button ${
+            props.savedOnly ? "cardList__button_invisible" : ""
+          }`}
+        >
+          Ещё
+        </button>
+      </section>
     </>
   );
 }

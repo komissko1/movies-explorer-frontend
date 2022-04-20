@@ -15,6 +15,10 @@
   gap: 14px;
 }
 
+.search__input:focus-visible {
+  border: 1px solid #2be080;
+}
+
 .search__input {
   padding: 14px 0;
   width: calc(100% - 100px);
