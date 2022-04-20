@@ -1,0 +1,12 @@
+.bluemode {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  background: #465DFF;
+  text-decoration: none;
+  color: white;
+}
+
+.bluemode a{
+  color: white;
+}
