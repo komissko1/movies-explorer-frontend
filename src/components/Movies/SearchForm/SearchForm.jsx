@@ -1,11 +1,41 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import SearchValidation from "../../../utils/Validation/SearchValidation.js";
+import { CurrentUserContext } from "../../../contexts/CurrentUserContext";
 
-function SearchForm() {
+function SearchForm(props) {
+  const [searchString, setSearchString] = React.useState("");
+  const [checkBoxState, setCheckBoxState] = React.useState(false);
+  const [alertMessage, setAlertMessage] = React.useState("");
+  const currentUser = React.useContext(CurrentUserContext);
+
+  React.useEffect(() => {
+    if (localStorage.getItem("searchString")) {
+      document.getElementById("ShortMeterCheck").checked = JSON.parse(
+        localStorage.getItem("checkBoxState")
+      );
+      setSearchString(localStorage.getItem("searchString"));
+      setCheckBoxState(localStorage.getItem("checkBoxState"));
+    }
+  }, []);
+
+  function handleSearchString(e) {
+    setSearchString(e.target.value);
+  }
+
+  function handleCheckBoxChange() {
+    setCheckBoxState(document.getElementById("ShortMeterCheck").checked);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const message = SearchValidation(searchString);
+    setAlertMessage(message);
+    if (!message) props.onSearchRequest(searchString, checkBoxState);
+  }
+
   return (
-    <>
-    <div className="search">
-      <div className="search__form">
+    <form className="search" id="form" onSubmit={handleSubmit} noValidate>
+      <label className="search__form">
         <input
           className="search__input"
           type="text"
@@ -14,15 +44,23 @@ function SearchForm() {
           maxLength="50"
           placeholder="Фильм"
           required
+          onChange={handleSearchString}
+          value={searchString}
         />
-        <button type="submit" className="search__button">Найти</button>
-      </div>
+        <button type="submit" className="search__button">
+          Найти
+        </button>
+        <span className="search__input-error">{alertMessage}</span>
+      </label>
       <label className="checkbox">
-        <input type="checkbox"/>
+        <input
+          type="checkbox"
+          id="ShortMeterCheck"
+          onChange={handleCheckBoxChange}
+        />
         <p className="checkbox__text">Короткометражки</p>
       </label>
-    </div>
-    </>
+    </form>
   );
 }
 

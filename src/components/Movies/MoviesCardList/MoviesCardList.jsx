@@ -1,43 +1,51 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import MovieCard from "../MovieCard/MovieCard";
-import cardList from "../../../utils/cardList";
 
 function MoviesCardList(props) {
   return (
     <>
-      <section className="cardList" aria-label="Фильмы">
-        {props.savedOnly
-          ? cardList
-              .filter((item) => item.isSaved)
-              .map((item) => (
-                <MovieCard
-                  title={item.title}
-                  length={item.length}
-                  image={item.image}
-                  isSaved={item.isSaved}
-                  savedOnly={props.savedOnly}
-                />
-              ))
-          : cardList.map((item) => (
-              <MovieCard
-                title={item.title}
-                length={item.length}
-                image={item.image}
-                isSaved={item.isSaved}
-              />
-            ))}
-      </section>
-      <section className="cardList__addCards">
-        <button
-          type="button"
-          className={`cardList__button ${
-            props.savedOnly ? "cardList__button_invisible" : ""
-          }`}
-        >
-          Ещё
-        </button>
-      </section>
+      {props.movies.length !== 0 ? (
+        <>
+          <section className="cardList" aria-label="Фильмы">
+            {props.savedOnly
+              ? props.movies
+                  .filter((item) => item.isSaved)
+                  .map((item) => (
+                    <MovieCard
+                      nameRU={item.nameRU}
+                      duration={item.duration}
+                      image={item.image}
+                      trailerLink={item.trailerLink}
+                      isSaved={item.isSaved}
+                      savedOnly={props.savedOnly}
+                      key={item.id}
+                    />
+                  ))
+              : props.movies.map((item) => (
+                  <MovieCard
+                    nameRU={item.nameRU}
+                    duration={item.duration}
+                    image={item.image}
+                    trailerLink={item.trailerLink}
+                    isSaved={item.isSaved}
+                    key={item.id}
+                  />
+                ))}
+          </section>
+          <section className="cardList__addCards">
+            <button
+              type="button"
+              className={`cardList__button ${
+                props.savedOnly ? "cardList__button_invisible" : ""
+              }`}
+            >
+              Ещё
+            </button>
+          </section>
+        </>
+      ) : (
+        <p className="cardList__filler">Начните поиск фильмов</p>
+      )}
     </>
   );
 }

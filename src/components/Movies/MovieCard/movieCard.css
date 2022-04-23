@@ -1,7 +1,7 @@
 .card {
   box-sizing: border-box;
   max-width: 360px;
-  flex: 1 0 342px;
+  /* flex: 1 0 342px; */
   display: flex;
   flex-direction: column;
   background: #FDFDFD;
@@ -24,6 +24,9 @@
   font-weight: 500;
   font-size: 15px;
   line-height: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis
 }
 
 .card__length {
@@ -34,10 +37,12 @@
   line-height: 18px;
   text-align: right;
   color: #A0A0A0;
+  white-space: nowrap;
 }
 
 .card__image {
   width: 100%;
+  aspect-ratio: 9 / 5;
   object-fit: cover;
 }
 

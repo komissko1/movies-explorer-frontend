@@ -13,6 +13,7 @@
   border-radius: 50px;
   justify-content: space-between;
   gap: 14px;
+  position: relative;
 }
 
 .search__input:focus-visible {
@@ -37,6 +38,15 @@
 
 .search__input::placeholder {
   color: #A0A0A0;
+}
+
+.search__input-error {
+  color: #FF6838;
+  font-size: 11px;
+  line-height: 16px;
+  position: absolute;
+  top: 50px;
+  left: 22px
 }
 
 .search__button {

@@ -17,7 +17,7 @@ import Profile from "../Profile/Profile";
 import Footer from "../Footer/Footer";
 import PopupMenu from "../PopupMenu/PopupMenu";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
-// import api from "../../utils/api.js";
+import api from "../../utils/MoviesApi";
 // import * as auth from "../../utils/auth";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext.js";
 
@@ -27,6 +27,16 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(true);
   // const location = useLocation();
   // const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      Promise.resolve(api.getCardsData())
+        .then((cardsData) => {
+          localStorage.setItem("cards", JSON.stringify(cardsData));
+        })
+        .catch((err) => console.log(err))
+    }
+  }, [isLoggedIn]);
 
   function handleMenuClick() {
     setPopupMenuState(!popupMenuState);
@@ -89,7 +99,7 @@ function App() {
             />
             <Route path="*" element={<Navigate to="/404" />} />
           </Routes>
-        <PopupMenu isOpen={popupMenuState} onClose={closePopup} />
+          <PopupMenu isOpen={popupMenuState} onClose={closePopup} />
         </div>
       </CurrentUserContext.Provider>
     </>

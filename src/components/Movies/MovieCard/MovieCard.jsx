@@ -1,15 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import imgPath from "../../../images/pic.svg";
 
 function MovieCard(props) {
   return (
     <div className="card">
       <div className="card__header">
-        <p className="card__title">{props.title}</p>
-        <p className="card__length">{props.length}</p>
+        <p className="card__title">{props.nameRU}</p>
+        <p className="card__length">{`${props.duration} минут`}</p>
       </div>
-      <img className="card__image" src={imgPath} alt="movieImage" />
+      <img className="card__image" src={`https://api.nomoreparties.co${props.image.url}`} alt={props.image.nameEN} />
       <div className="card__bottom">
         <button
           type="button"
