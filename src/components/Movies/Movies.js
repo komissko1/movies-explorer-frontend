@@ -2,6 +2,7 @@ import React from "react";
 import SearchForm from "./SearchForm/SearchForm";
 import Preloader from "../Preloader/Preloader";
 import MoviesCardList from "./MoviesCardList/MoviesCardList";
+import api from "../../utils/MoviesApi";
 
 function Movies() {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -14,21 +15,24 @@ function Movies() {
     }
   }, []);
 
-  function handleSearchRequest(movie, checkBoxState) {
+  function handleSearchRequest(searchString, checkBoxState) {
     setIsLoading(true);
-    const moviesData = JSON.parse(localStorage.getItem("cards"));
-    Promise.resolve(
-      moviesData
-        .filter((item) => (checkBoxState ? item.duration <= 40 : true))
-        .filter((item) => item.nameRU.includes(movie))
-    )
-      .then((data) => {
-        setMovies(data);
-        localStorage.setItem("searchResult", JSON.stringify(data));
+    Promise.resolve(api.getCardsData())
+      .then((moviesData) => {
+        Promise.resolve(
+          moviesData
+            .filter((item) => (checkBoxState ? item.duration <= 40 : true))
+            .filter((item) => item.nameRU.includes(searchString))
+        )
+          .then((data) => {
+            setMovies(data);
+            localStorage.setItem("searchResult", JSON.stringify(data));
+          })
+          .catch((err) => console.log(err));
       })
       .catch((err) => console.log(err))
       .finally(setIsLoading(false));
-    localStorage.setItem("searchString", movie);
+    localStorage.setItem("searchString", searchString);
     localStorage.setItem("checkBoxState", checkBoxState);
   }
 
