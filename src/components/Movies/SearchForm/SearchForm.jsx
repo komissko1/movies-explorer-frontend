@@ -1,5 +1,5 @@
 import React from "react";
-import SearchValidation from "../../../utils/Validation/SearchValidation.js";
+import SearchValidation from "../../../utils/Search/SearchValidation.js";
 import { CurrentUserContext } from "../../../contexts/CurrentUserContext";
 
 function SearchForm(props) {
@@ -40,7 +40,7 @@ function SearchForm(props) {
           className="search__input"
           type="text"
           id="movie"
-          minLength="3"
+          minLength="2"
           maxLength="50"
           placeholder="Фильм"
           required
@@ -57,6 +57,7 @@ function SearchForm(props) {
           type="checkbox"
           id="ShortMeterCheck"
           onChange={handleCheckBoxChange}
+          value={checkBoxState}
         />
         <p className="checkbox__text">Короткометражки</p>
       </label>

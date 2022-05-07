@@ -2,7 +2,7 @@ const apiConfig = {
   baseUrl: 'https://api.nomoreparties.co/beatfilm-movies',
 };
 
-class Api {
+class MoviesApi {
   constructor(apiConfig) {
     this._baseUrl = apiConfig.baseUrl;
   }
@@ -14,7 +14,7 @@ class Api {
     return Promise.reject("Server is not responding");
   }
 
-  getCardsData() {
+  getMoviesData() {
     return fetch(this._baseUrl, {
       headers: {
       "Content-Type": "application/json"},
@@ -22,5 +22,5 @@ class Api {
   }
 }
 
-const api = new Api(apiConfig);
-export default api;
+const moviesApi = new MoviesApi(apiConfig);
+export default moviesApi;

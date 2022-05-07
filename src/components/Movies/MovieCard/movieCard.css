@@ -1,7 +1,6 @@
 .card {
   box-sizing: border-box;
   max-width: 360px;
-  /* flex: 1 0 342px; */
   display: flex;
   flex-direction: column;
   background: #FDFDFD;
