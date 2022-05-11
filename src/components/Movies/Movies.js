@@ -27,9 +27,9 @@ function Movies() {
 
   async function renderCards() {
     const searchResult = JSON.parse(localStorage.getItem("searchResult"));
+    searchResult.length === 0 ? setMessage(messageText.notFound) : setMessage("");
     cardsCount.current = countRenderedCards();
     await setMovies(searchResult.slice(0, cardsCount.current));
-    movies !== [] ? setMessage("") : setMessage(messageText.notFound);
     cardsCount.current < searchResult.length
       ? setIsMoreButtonVisible(true)
       : setIsMoreButtonVisible(false);

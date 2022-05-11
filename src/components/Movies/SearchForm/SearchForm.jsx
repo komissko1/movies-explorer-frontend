@@ -7,12 +7,10 @@ function SearchForm(props) {
   const [checkBoxState, setCheckBoxState] = React.useState(false);
   const [alertMessage, setAlertMessage] = React.useState("");
   const currentUser = React.useContext(CurrentUserContext);
+  const checkBoxRef = React.useRef();
 
   React.useEffect(() => {
     if (localStorage.getItem("searchString")) {
-      document.getElementById("ShortMeterCheck").checked = JSON.parse(
-        localStorage.getItem("checkBoxState")
-      );
       setSearchString(localStorage.getItem("searchString"));
       setCheckBoxState(localStorage.getItem("checkBoxState"));
     }
@@ -22,8 +20,8 @@ function SearchForm(props) {
     setSearchString(e.target.value);
   }
 
-  function handleCheckBoxChange() {
-    setCheckBoxState(document.getElementById("ShortMeterCheck").checked);
+  function handleCheckBoxChange(e) {
+    setCheckBoxState(checkBoxRef.current.checked);
   }
 
   function handleSubmit(e) {
@@ -57,7 +55,7 @@ function SearchForm(props) {
           type="checkbox"
           id="ShortMeterCheck"
           onChange={handleCheckBoxChange}
-          value={checkBoxState}
+          ref={checkBoxRef}
         />
         <p className="checkbox__text">Короткометражки</p>
       </label>
