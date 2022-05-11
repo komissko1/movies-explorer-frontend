@@ -40,7 +40,7 @@ function SearchForm(props) {
           className="search__input"
           type="text"
           id="movie"
-          minLength="2"
+          minLength="3"
           maxLength="50"
           placeholder="Фильм"
           required

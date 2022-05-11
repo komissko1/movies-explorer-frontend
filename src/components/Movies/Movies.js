@@ -2,39 +2,40 @@ import React from "react";
 import SearchForm from "./SearchForm/SearchForm";
 import Preloader from "../Preloader/Preloader";
 import MoviesCardList from "./MoviesCardList/MoviesCardList";
-// import moviesApi from "../../utils/MoviesApi";
-import getSearchedMovies from "../../utils/Search/SearchHandler";
+import moviesApi from "../../utils/MoviesApi";
+
+const messageText = {
+  startSearch: "Начните поиск фильмов",
+  notFound: "Ничего не найдено",
+  searchError:
+    "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз",
+};
 
 function Movies() {
   const [isSearching, setIsSearching] = React.useState(false);
   const [isMoreButtonVisible, setIsMoreButtonVisible] = React.useState(false);
   const [movies, setMovies] = React.useState([]);
-  const [cardsRendered, setCardsRendered] = React.useState(0);
-  const [message, setMessage] = React.useState("Начните поиск фильмов");
+  const [message, setMessage] = React.useState("");
+  const cardsCount = React.useRef();
 
   React.useEffect(() => {
-    console.log("on start");
-    renderedCardsCount();
+    cardsCount.current = 0;
+    localStorage.getItem("searchResult") === null
+    ? setMessage(messageText.startSearch)
+    : renderCards();
   }, []);
 
-  React.useEffect(() => {
-    console.log("new render");
-    if (
-      JSON.parse(localStorage.getItem("searchResult")) &&
-      JSON.parse(localStorage.getItem("searchResult")) !== []
-    ) {
-      setMessage("");
-      const renderedMovies = JSON.parse(localStorage.getItem("searchResult"));
-      setMovies(renderedMovies.slice(0, cardsRendered));
-      console.log(movies.length + "done" + cardsRendered + "planned");
-      movies.length <= cardsRendered
-        ? setIsMoreButtonVisible(true)
-        : setIsMoreButtonVisible(false);
-    }
-  }, [cardsRendered]);
+  async function renderCards() {
+    const searchResult = JSON.parse(localStorage.getItem("searchResult"));
+    cardsCount.current = countRenderedCards();
+    await setMovies(searchResult.slice(0, cardsCount.current));
+    movies !== [] ? setMessage("") : setMessage(messageText.notFound);
+    cardsCount.current < searchResult.length
+      ? setIsMoreButtonVisible(true)
+      : setIsMoreButtonVisible(false);
+  }
 
-  function renderedCardsCount() {
-    console.log("count cards");
+  function countRenderedCards() {
     const grid = document.getElementById("gridMovies");
     const columns = window
       .getComputedStyle(grid)
@@ -42,37 +43,37 @@ function Movies() {
     const columnsNumber = columns.split(" ").length;
     switch (columnsNumber) {
       case 3:
-        if (cardsRendered === 0) {
-          setCardsRendered(12);
-        } else {
-          setCardsRendered(cardsRendered + 3);
-        }
-        break;
+        return cardsCount.current === 0 ? 12 : (cardsCount.current + 3);
       case 2:
-        if (cardsRendered === 0) {
-          setCardsRendered(8);
-        } else {
-          setCardsRendered(cardsRendered + 2);
-        }
-        break;
+        return cardsCount.current === 0 ? 8 : (cardsCount.current + 2);
       default:
-        if (cardsRendered === 0) {
-          setCardsRendered(5);
-        } else {
-          setCardsRendered(cardsRendered + 2);
-        }
+        return cardsCount.current === 0 ? 5 : (cardsCount.current + 2);
     }
-    console.log(cardsRendered);
   }
 
   async function handleSearchRequest(searchString, checkBoxState) {
     setIsSearching(true);
-    setCardsRendered(0);
-    const searchResult = await getSearchedMovies(searchString, checkBoxState);
-    setMessage(searchResult.message);
-    setMovies(searchResult.movies);
-    setIsSearching(false);
-    renderedCardsCount();
+    if (!localStorage.getItem("allMovies"))
+      await Promise.resolve(moviesApi.getMoviesData())
+        .then((moviesData) =>
+          localStorage.setItem("allMovies", JSON.stringify(moviesData))
+        )
+        .catch((err) => setMessage(messageText.searchError));
+    const allMovies = JSON.parse(localStorage.getItem("allMovies"));
+    await Promise.resolve(
+      allMovies
+        .filter((item) => (checkBoxState ? item.duration <= 40 : true))
+        .filter((item) => item.nameRU.includes(searchString))
+    )
+      .then((data) => {
+        localStorage.setItem("searchString", searchString);
+        localStorage.setItem("checkBoxState", checkBoxState);
+        localStorage.setItem("searchResult", JSON.stringify(data));
+      })
+      .catch((err) => setMessage(messageText.searchError))
+      .finally(() => setIsSearching(false));
+    cardsCount.current = 0;
+    renderCards();
   }
 
   return (
@@ -85,7 +86,7 @@ function Movies() {
       )}
       <MoviesCardList
         movies={movies}
-        onClick={renderedCardsCount}
+        onClick={renderCards}
         isMoreButtonVisible={isMoreButtonVisible}
       />
     </div>
