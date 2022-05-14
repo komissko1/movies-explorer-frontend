@@ -7,7 +7,7 @@ function Profile(props) {
   return (
     <div className="profile">
       <p className="profile__title">Привет, Виталий!</p>
-      <Form buttonText="Редактировать" type="profile">
+      <Form buttonText="Редактировать" isButtonActive={false}>
         <label className="profile__label">Имя
           <input
             className="profile__input"

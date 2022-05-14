@@ -3,15 +3,10 @@ import SearchForm from "./SearchForm/SearchForm";
 import Preloader from "../Preloader/Preloader";
 import MoviesCardList from "./MoviesCardList/MoviesCardList";
 import moviesApi from "../../utils/MoviesApi";
+import mainApi from "../../utils/MainApi";
+import {messageText} from "../../utils/utils"
 
-const messageText = {
-  startSearch: "Начните поиск фильмов",
-  notFound: "Ничего не найдено",
-  searchError:
-    "Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз",
-};
-
-function Movies() {
+function Movies(props) {
   const [isSearching, setIsSearching] = React.useState(false);
   const [isMoreButtonVisible, setIsMoreButtonVisible] = React.useState(false);
   const [movies, setMovies] = React.useState([]);
@@ -87,6 +82,7 @@ function Movies() {
       <MoviesCardList
         movies={movies}
         onClick={renderCards}
+        onCardSave={props.onCardSave}
         isMoreButtonVisible={isMoreButtonVisible}
       />
     </div>

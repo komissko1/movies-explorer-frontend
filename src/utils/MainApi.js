@@ -5,8 +5,8 @@ const apiConfig = {
 class Api {
   constructor(apiConfig) {
     this._baseUrl = apiConfig.baseUrl;
-    this._cardsUrl = `${apiConfig.baseUrl}/cards/`;
-    this._userUrl = `${apiConfig.baseUrl}/users/me/`;
+    this._usersUrl = `${apiConfig.baseUrl}/users/`;
+    this._moviesUrl = `${apiConfig.baseUrl}/movies/`;
   }
 
   _checkResponse(res) {
@@ -16,40 +16,52 @@ class Api {
     return Promise.reject("Server is not responding");
   }
 
-  getCardsData() {
-    return fetch(this._cardsUrl, {
+  getMoviesData() {
+    return fetch(this._moviesUrl, {
       headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem('jwt')}`},
-      credentials: "include",
+      // Authorization: `Bearer ${localStorage.getItem('jwt')}`},
+      }
+      // credentials: "include",
     }).then(this._checkResponse);
   }
 
-  getUserData() {
-    return fetch(this._userUrl, {
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem('jwt')}`},
-    }).then(this._checkResponse);
-  }
-
-  postCardData(newName, newLink) {
-    return fetch(this._cardsUrl, {
+  postMovieData(movie) {
+    return fetch(this._moviesUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem('jwt')}`},
-      credentials: "include",
+        // Authorization: `Bearer ${localStorage.getItem('jwt')}`
+      },
+      // credentials: "include",
       body: JSON.stringify({
-        name: newName,
-        link: newLink,
+        movie
       }),
     }).then(this._checkResponse);
   }
 
+  deleteCardData(itemId) {
+    return fetch(`${this._moviesUrl}${itemId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        // Authorization: `Bearer ${localStorage.getItem('jwt')}`
+      },
+      // credentials: "include",
+    }).then(this._checkResponse);
+  }
+
+  getUserData() {
+    return fetch(this._usersUrl, {
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem('jwt')}`},
+    }).then(this._checkResponse);
+  }
+
   patchUserData(newName, newJob) {
-    return fetch(this._userUrl, {
+    return fetch(this._usersUrl, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -62,19 +74,9 @@ class Api {
     }).then(this._checkResponse);
   }
 
-  deleteCardData(itemId) {
-    return fetch(`${this._cardsUrl}${itemId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem('jwt')}`},
-      credentials: "include",
-    }).then(this._checkResponse);
-  }
-
   changeCardLikeStatus(itemId, status) {
     const method = status === true ? "DElETE" : "PUT";
-    return fetch(`${this._cardsUrl}likes/${itemId}`, {
+    return fetch(`${this._moviesUrl}likes/${itemId}`, {
       method: method,
       headers: {
         "Content-Type": "application/json",
@@ -94,8 +96,6 @@ class Api {
     }).then(this._checkResponse);
   }
 }
-
-// Instance of Api class
 
 const api = new Api(apiConfig);
 export default api;

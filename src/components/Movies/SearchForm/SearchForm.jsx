@@ -1,5 +1,5 @@
 import React from "react";
-import SearchValidation from "../../../utils/Search/SearchValidation.js";
+import SearchValidation from "../../../utils/Validation/SearchValidation.js";
 import { CurrentUserContext } from "../../../contexts/CurrentUserContext";
 
 function SearchForm(props) {

@@ -1,17 +1,17 @@
-export const BASE_URL = 'http://localhost:3000';
+export const BASE_URL = 'http://localhost:3002';
 
-export const register = (password, email) => {
+export const register = ({name, email, password }) => {
   return fetch(`${BASE_URL}/signup`, {
     method: "POST",
     headers: {
       'Accept': "application/json",
       'Content-Type': "application/json",
     },
-    body: JSON.stringify({ password, email }),
+    body: JSON.stringify({ name, email, password }),
   })
     .then((res) => {
       try {
-        if (res.status === 400 || res.status === 401 || res.status === 409 ) {
+        if (res.status === 400 || res.status === 409 ) {
           return false;
         } else {
           return res.json();
@@ -22,7 +22,7 @@ export const register = (password, email) => {
     })
 };
 
-export const authorize = (password, email) => {
+export const authorize = ({password, email}) => {
   return fetch(`${BASE_URL}/signin`, {
     method: "POST",
     headers: {
@@ -33,7 +33,6 @@ export const authorize = (password, email) => {
     body: JSON.stringify({ password, email }),
   })
     .then((res) => {
-      console.log(res)
       try {
         if (res.status === 400 || res.status === 401) {
           return false;

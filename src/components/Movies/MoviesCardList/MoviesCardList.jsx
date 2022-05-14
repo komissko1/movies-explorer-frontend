@@ -8,13 +8,15 @@ function MoviesCardList(props) {
       <section className="cardList" id="gridMovies" aria-label="Films">
         {props.movies.map((item) => (
           <MovieCard
-            nameRU={item.nameRU}
-            duration={item.duration}
-            image={item.image}
-            trailerLink={item.trailerLink}
+            card={item}
+            // nameRU={item.nameRU}
+            // duration={item.duration}
+            // image={item.image}
+            // trailerLink={item.trailerLink}
             isSaved={item.isSaved}
             savedOnly={props.savedOnly}
             key={item.id}
+            onCardSave={props.onCardSave}
           />
         ))}
       </section>

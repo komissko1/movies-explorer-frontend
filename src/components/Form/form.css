@@ -68,6 +68,7 @@
   .form__input-error {
     width: 100%;
     padding: 6px 0;
+    min-height: 10px;
     display: inline-block;
     opacity: 1;
     color: #FF0000;
@@ -92,6 +93,8 @@
   font-weight: 400;
   font-size: 13px;
   line-height: 16px;
+  cursor: inherit;
+  pointer-events: none;
 }
 
 .form__bottom-text{

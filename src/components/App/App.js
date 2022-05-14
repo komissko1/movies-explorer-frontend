@@ -3,8 +3,8 @@ import {
   Navigate,
   Route,
   Routes,
-  // useLocation,
-  //   useNavigate,
+  useLocation,
+  useNavigate,
 } from "react-router-dom";
 import Login from "../Login/Login";
 import Register from "../Register/Register";
@@ -18,25 +18,54 @@ import Footer from "../Footer/Footer";
 import PopupMenu from "../PopupMenu/PopupMenu";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 // import api from "../../utils/MoviesApi";
-// import * as auth from "../../utils/auth";
+import * as auth from "../../utils/auth";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext.js";
 
 function App() {
-  const [currentUser, setCurrentUser] = React.useState({ name: "sasa" });
+  const [currentUser, setCurrentUser] = React.useState({});
   const [popupMenuState, setPopupMenuState] = React.useState(false);
-  const [isLoggedIn, setIsLoggedIn] = React.useState(true);
-  // const location = useLocation();
-  // const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    handleTockenCheck(location.pathname);
+  }, []);
 
   // React.useEffect(() => {
   //   if (isLoggedIn) {
-  //     Promise.resolve(api.getCardsData())
-  //       .then((cardsData) => {
-  //         localStorage.setItem("cards", JSON.stringify(cardsData));
+  //     Promise.all(api.getUserData())
+  //       .then((userData) => {
+  //         setCurrentUser(userData);
   //       })
-  //       .catch((err) => console.log(err))
-  //   }
+  //       .catch((err) => console.log(err));
+  //   };
   // }, [isLoggedIn]);
+
+  const handleTockenCheck = (path) => {
+    if (localStorage.getItem("jwt")) {
+      const jwt = localStorage.getItem("jwt");
+      auth.getToken(jwt).then((res) => {
+        if (res) {
+          handleLogin();
+          navigate(path);
+        }
+      });
+    }
+  };
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("jwt");
+    setIsLoggedIn(false);
+  };
+
+  function handleEditProfileClick() {
+    navigate("/profile");
+  }
 
   function handleMenuClick() {
     setPopupMenuState(!popupMenuState);
@@ -46,63 +75,73 @@ function App() {
     setPopupMenuState(!popupMenuState);
   }
 
+  function handleCardSave(card) {
+    const isSaved = card.likes.some((i) => i._id === currentUser._id);
+    // api
+    //   .changeCardLikeStatus(card._id, isLiked)
+    //   .then((newCard) => {
+    //     setCards((cards) =>
+    //       cards.map((c) => (c._id === card._id ? newCard : c))
+    //     );
+    //   })
+    // .catch((err) => console.log(err));
+  }
+
   return (
-    <>
-      <CurrentUserContext.Provider value={currentUser}>
-        <div className="root__container">
-          <Routes>
-            <Route path="/signin" element={<Login />} />
-            <Route path="/signup" element={<Register />} />
-            <Route path="/404" element={<PageNotFound />} />
-            <Route
-              path="/"
-              element={
-                <>
-                  <Header
-                    loggedIn={isLoggedIn}
-                    mode="bluemode"
-                    onClick={handleMenuClick}
-                  />
-                  <Main />
-                  <Footer />
-                </>
-              }
-            />
-            <Route
-              path="/movies"
-              element={
-                <ProtectedRoute loggedIn={isLoggedIn}>
-                  <Header loggedIn={isLoggedIn} onClick={handleMenuClick} />
-                  <Movies />
-                  <Footer />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/saved-movies"
-              element={
-                <ProtectedRoute loggedIn={isLoggedIn}>
-                  <Header loggedIn={isLoggedIn} onClick={handleMenuClick} />
-                  <SavedMovies />
-                  <Footer />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute loggedIn={isLoggedIn}>
-                  <Header loggedIn={isLoggedIn} onClick={handleMenuClick} />
-                  <Profile />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="*" element={<Navigate to="/404" />} />
-          </Routes>
-          <PopupMenu isOpen={popupMenuState} onClose={closePopup} />
-        </div>
-      </CurrentUserContext.Provider>
-    </>
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className="root__container">
+        <Routes>
+          <Route path="/signin" element={<Login onLogin={handleLogin} />} />
+          <Route path="/signup" element={<Register />} />
+          <Route path="/404" element={<PageNotFound />} />
+          <Route
+            path="/"
+            element={
+              <>
+                <Header
+                  loggedIn={isLoggedIn}
+                  mode="bluemode"
+                  onClick={handleMenuClick}
+                />
+                <Main />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="/movies"
+            element={
+              <ProtectedRoute loggedIn={isLoggedIn}>
+                <Header loggedIn={isLoggedIn} onClick={handleMenuClick} />
+                <Movies onCardSave={handleCardSave} />
+                <Footer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/saved-movies"
+            element={
+              <ProtectedRoute loggedIn={isLoggedIn}>
+                <Header loggedIn={isLoggedIn} onClick={handleMenuClick} />
+                <SavedMovies />
+                <Footer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute loggedIn={isLoggedIn}>
+                <Header loggedIn={isLoggedIn} onClick={handleMenuClick} />
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<Navigate to="/404" />} />
+        </Routes>
+        <PopupMenu isOpen={popupMenuState} onClose={closePopup} />
+      </div>
+    </CurrentUserContext.Provider>
   );
 }
 
