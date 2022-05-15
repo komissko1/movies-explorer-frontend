@@ -9,10 +9,6 @@ function MoviesCardList(props) {
         {props.movies.map((item) => (
           <MovieCard
             card={item}
-            // nameRU={item.nameRU}
-            // duration={item.duration}
-            // image={item.image}
-            // trailerLink={item.trailerLink}
             isSaved={item.isSaved}
             savedOnly={props.savedOnly}
             key={item.id}

@@ -17,7 +17,6 @@ import Profile from "../Profile/Profile";
 import Footer from "../Footer/Footer";
 import PopupMenu from "../PopupMenu/PopupMenu";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
-// import api from "../../utils/MoviesApi";
 import * as auth from "../../utils/auth";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext.js";
 
@@ -32,39 +31,31 @@ function App() {
     handleTockenCheck(location.pathname);
   }, []);
 
-  // React.useEffect(() => {
-  //   if (isLoggedIn) {
-  //     Promise.all(api.getUserData())
-  //       .then((userData) => {
-  //         setCurrentUser(userData);
-  //       })
-  //       .catch((err) => console.log(err));
-  //   };
-  // }, [isLoggedIn]);
-
   const handleTockenCheck = (path) => {
     if (localStorage.getItem("jwt")) {
       const jwt = localStorage.getItem("jwt");
       auth.getToken(jwt).then((res) => {
         if (res) {
-          handleLogin();
+          handleLogin(res);
           navigate(path);
         }
       });
     }
   };
 
-  const handleLogin = () => {
+  const handleLogin = (user) => {
     setIsLoggedIn(true);
+    setCurrentUser(user);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("jwt");
+    localStorage.clear();
+    setCurrentUser({});
     setIsLoggedIn(false);
   };
 
-  function handleEditProfileClick() {
-    navigate("/profile");
+  function handleUpdateUser(userData) {
+    setCurrentUser(userData);
   }
 
   function handleMenuClick() {
@@ -133,7 +124,7 @@ function App() {
             element={
               <ProtectedRoute loggedIn={isLoggedIn}>
                 <Header loggedIn={isLoggedIn} onClick={handleMenuClick} />
-                <Profile />
+                <Profile onLogout={handleLogout} onUserUpdate={handleUpdateUser}/>
               </ProtectedRoute>
             }
           />

@@ -3,33 +3,20 @@ import * as auth from "../../utils/auth";
 import { Link, useNavigate } from "react-router-dom";
 import logoPath from "../../images/logo.svg";
 import Form from "../Form/Form";
-import FormValidation from "../../utils/Validation/FormValidation";
 import { alertText } from "../../utils/utils";
 
-function Register(props) {
-  const [isValidated, setIsValidated] = React.useState({
-    name: false,
-    email: false,
-    password: false,
-  });
+function Register() {
+  const [validatedFields, setValidatedFields] = React.useState({});
   const [isFormValid, setIsFormValid] = React.useState(false);
   const nameRef = React.useRef();
   const emailRef = React.useRef();
   const passwordRef = React.useRef();
   const navigate = useNavigate();
 
-  React.useEffect(() => {
-    Object.values(isValidated).some((item) => item === false)
-      ? setIsFormValid(false)
-      : setIsFormValid(true);
-  }, [isValidated])
-
-  const handleChange = (e) => {
-    const validatedKeyPare = FormValidation({
-      fieldName: e.target.id,
-      value: e.target.value,
-    });
-    setIsValidated({ ...isValidated, ...validatedKeyPare });
+  const handleFieldChange = (e) => {
+    const validatedKeyPare = {[e.target.id]: e.target.checkValidity() };
+    setValidatedFields({ ...validatedFields, ...validatedKeyPare });
+    setIsFormValid(e.target.closest("form").checkValidity());
   };
 
   const handleSubmit = (e) => {
@@ -40,7 +27,6 @@ function Register(props) {
         email: emailRef.current.value,
         password: passwordRef.current.value,
       };
-
       auth
         .register(fieldsData)
         .then((res) => {
@@ -69,28 +55,30 @@ function Register(props) {
             className="form__input"
             type="text"
             id="name"
+            minLength="3"
+            maxLength="50"
             placeholder="Имя"
             required
             ref={nameRef}
-            onChange={handleChange}
+            onChange={handleFieldChange}
           />
           <span className="form__input-error" id="name-alert">
-            {isValidated.name ? "" : alertText.name}
+            {validatedFields.name === false ? alertText.name : ""}
           </span>
         </label>
         <label>
           E-mail
           <input
             className="form__input"
-            type="text"
+            type="email"
             id="email"
             placeholder="E-mail"
             required
             ref={emailRef}
-            onChange={handleChange}
+            onChange={handleFieldChange}
           />
           <span className="form__input-error" id="email-alert">
-            {isValidated.email ? "" : alertText.email}
+          {validatedFields.email === false ? alertText.email : ""}
           </span>
         </label>
         <label>
@@ -104,10 +92,11 @@ function Register(props) {
             placeholder="Пароль"
             required
             ref={passwordRef}
-            onChange={handleChange}
+            pattern="^[\w!@#\x26()$\x22{%}:;',?*~$^+=<>].*"
+            onChange={handleFieldChange}
           />
           <span className="form__input-error" id="password-alert">
-            {isValidated.password ? "" : alertText.password}
+          {validatedFields.password === false ? alertText.password : ""}
           </span>
         </label>
       </Form>

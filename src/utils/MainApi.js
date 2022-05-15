@@ -1,11 +1,11 @@
 const apiConfig = {
-  baseUrl: 'http://localhost:3000',
+  baseUrl: "http://localhost:3002",
 };
 
 class Api {
   constructor(apiConfig) {
     this._baseUrl = apiConfig.baseUrl;
-    this._usersUrl = `${apiConfig.baseUrl}/users/`;
+    this._usersUrl = `${apiConfig.baseUrl}/users/me`;
     this._moviesUrl = `${apiConfig.baseUrl}/movies/`;
   }
 
@@ -19,10 +19,10 @@ class Api {
   getMoviesData() {
     return fetch(this._moviesUrl, {
       headers: {
-      "Content-Type": "application/json",
-      // Authorization: `Bearer ${localStorage.getItem('jwt')}`},
-      }
-      // credentials: "include",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+      },
+      credentials: "include",
     }).then(this._checkResponse);
   }
 
@@ -31,11 +31,11 @@ class Api {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // Authorization: `Bearer ${localStorage.getItem('jwt')}`
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
       },
-      // credentials: "include",
+      credentials: "include",
       body: JSON.stringify({
-        movie
+        movie,
       }),
     }).then(this._checkResponse);
   }
@@ -45,9 +45,9 @@ class Api {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        // Authorization: `Bearer ${localStorage.getItem('jwt')}`
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
       },
-      // credentials: "include",
+      credentials: "include",
     }).then(this._checkResponse);
   }
 
@@ -56,20 +56,22 @@ class Api {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem('jwt')}`},
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+      },
     }).then(this._checkResponse);
   }
 
-  patchUserData(newName, newJob) {
+  patchUserData({name, email}) {
     return fetch(this._usersUrl, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem('jwt')}`},
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+      },
       credentials: "include",
       body: JSON.stringify({
-        name: newName,
-        about: newJob,
+        name,
+        email,
       }),
     }).then(this._checkResponse);
   }
@@ -80,7 +82,8 @@ class Api {
       method: method,
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem('jwt')}`},
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+      },
       credentials: "include",
     }).then(this._checkResponse);
   }
@@ -90,7 +93,8 @@ class Api {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem('jwt')}`},
+        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+      },
       credentials: "include",
       body: JSON.stringify({ avatar: avatarInfo }),
     }).then(this._checkResponse);

@@ -34,22 +34,22 @@ function PopupMenu({ isOpen, onClose }) {
         <>
           <ul className="popupMenu__items">
             <li className="link-effect">
-              <Link to="/" className={"popupMenu__link"}>
+              <Link to="/" className={"popupMenu__link"} onClick={onClose}>
                 Главная
               </Link>
             </li>
             <li className="link-effect">
-              <Link to="/movies" className={"popupMenu__link"}>
+              <Link to="/movies" className={"popupMenu__link"} onClick={onClose}>
                 Фильмы
               </Link>
             </li>
             <li className="link-effect">
-              <Link to="/saved-movies" className={"popupMenu__link"}>
+              <Link to="/saved-movies" className={"popupMenu__link"} onClick={onClose}>
                 Сохраненные фильмы
               </Link>
             </li>
           </ul>
-          <Link to="/profile" className="popupMenu__account link-effect">
+          <Link to="/profile" className="popupMenu__account link-effect" onClick={onClose}>
             Аккаунт
             <img
               className="popupMenu__account-pic"

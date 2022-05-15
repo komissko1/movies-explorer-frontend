@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function Form(props) {
+
   return (
     <form className="form__container" onSubmit={props.onSubmit}>
       <div className="form__elements">{props.children}</div>

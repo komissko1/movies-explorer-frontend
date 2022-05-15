@@ -3,34 +3,41 @@ import * as auth from "../../utils/auth";
 import { Link, useNavigate } from "react-router-dom";
 import logoPath from "../../images/logo.svg";
 import Form from "../Form/Form";
-import FormValidation from "../../utils/Validation/FormValidation";
+import { alertText } from "../../utils/utils";
 
 function Login(props) {
-  const [alertMessage, setAlertMessage] = React.useState({});
+  const [validatedFields, setValidatedFields] = React.useState({});
+  const [isFormValid, setIsFormValid] = React.useState(false);
   const emailRef = React.useRef();
   const passwordRef = React.useRef();
   const navigate = useNavigate();
 
+  const handleFieldChange = (e) => {
+    const validatedKeyPare = { [e.target.id]: e.target.checkValidity() };
+    setValidatedFields({ ...validatedFields, ...validatedKeyPare });
+    setIsFormValid(e.target.closest("form").checkValidity());
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const fieldsData = {
-      email: emailRef.current.value,
-      password: passwordRef.current.value,
-    };
-    const message = FormValidation(fieldsData);
-    setAlertMessage(message);
-    if (!message.error)
-      auth.authorize(fieldsData)
+    if (isFormValid) {
+      const fieldsData = {
+        email: emailRef.current.value,
+        password: passwordRef.current.value,
+      };
+      auth
+        .authorize(fieldsData)
         .then((res) => {
           if (res.user._id) {
-            localStorage.setItem('jwt', res.user._id);
-            props.onLogin();
+            localStorage.setItem("jwt", res.user._id);
+            props.onLogin(res.user);
             passwordRef.current.value = "";
             emailRef.current.value = "";
-            navigate("/");
+            navigate("/movies");
           }
         })
         .catch((err) => console.log(err));
+    }
   };
 
   return (
@@ -39,19 +46,24 @@ function Login(props) {
         <img src={logoPath} alt="Logotype" />
       </a>
       <p className="form__title">Рады видеть!</p>
-      <Form buttonText="Войти" onSubmit={handleSubmit}>
+      <Form
+        buttonText="Войти"
+        onSubmit={handleSubmit}
+        isFormValid={isFormValid}
+      >
         <label>
           E-mail
           <input
             className="form__input"
-            type="text"
+            type="email"
             id="email"
             placeholder="E-mail"
-            ref={emailRef}
             required
+            ref={emailRef}
+            onChange={handleFieldChange}
           />
           <span className="form__input-error" id="email-alert">
-            {alertMessage.email}
+            {validatedFields.email === false ? alertText.email : ""}
           </span>
         </label>
         <label>
@@ -63,11 +75,13 @@ function Login(props) {
             minLength="3"
             maxLength="20"
             placeholder="Пароль"
-            ref={passwordRef}
             required
+            ref={passwordRef}
+            pattern="^[\w!@#\x26()$\x22{%}:;',?*~$^+=<>].*"
+            onChange={handleFieldChange}
           />
           <span className="form__input-error" id="password-alert">
-            {alertMessage.password}
+            {validatedFields.password === false ? alertText.password : ""}
           </span>
         </label>
       </Form>

@@ -1,34 +1,34 @@
 import React from "react";
-import SearchValidation from "../../../utils/Validation/SearchValidation.js";
-import { CurrentUserContext } from "../../../contexts/CurrentUserContext";
 
 function SearchForm(props) {
-  const [searchString, setSearchString] = React.useState("");
-  const [checkBoxState, setCheckBoxState] = React.useState(false);
   const [alertMessage, setAlertMessage] = React.useState("");
-  const currentUser = React.useContext(CurrentUserContext);
+  const movieRef = React.useRef();
   const checkBoxRef = React.useRef();
 
   React.useEffect(() => {
     if (localStorage.getItem("searchString")) {
-      setSearchString(localStorage.getItem("searchString"));
-      setCheckBoxState(localStorage.getItem("checkBoxState"));
+      movieRef.current.value = localStorage.getItem("searchString");
+      checkBoxRef.current.checked = localStorage.getItem("checkBoxState");
     }
   }, []);
 
-  function handleSearchString(e) {
-    setSearchString(e.target.value);
-  }
-
-  function handleCheckBoxChange(e) {
-    setCheckBoxState(checkBoxRef.current.checked);
-  }
+  const handleFieldChange = (e) => {
+    if (movieRef.current.value === "") {
+      setAlertMessage("Нужно ввести ключевое слово");
+    } else {
+      e.target.checkValidity()
+        ? setAlertMessage("")
+        : setAlertMessage("Строка поиска содержит менее трех символов");
+    }
+  };
 
   function handleSubmit(e) {
     e.preventDefault();
-    const message = SearchValidation(searchString);
-    setAlertMessage(message);
-    if (!message) props.onSearchRequest(searchString, checkBoxState);
+    if (e.target.closest("form").checkValidity())
+      props.onSearchRequest(
+        movieRef.current.value,
+        checkBoxRef.current.checked
+      );
   }
 
   return (
@@ -42,8 +42,8 @@ function SearchForm(props) {
           maxLength="50"
           placeholder="Фильм"
           required
-          onChange={handleSearchString}
-          value={searchString}
+          onChange={handleFieldChange}
+          ref={movieRef}
         />
         <button type="submit" className="search__button">
           Найти
@@ -51,12 +51,7 @@ function SearchForm(props) {
         <span className="search__input-error">{alertMessage}</span>
       </label>
       <label className="checkbox">
-        <input
-          type="checkbox"
-          id="ShortMeterCheck"
-          onChange={handleCheckBoxChange}
-          ref={checkBoxRef}
-        />
+        <input type="checkbox" id="ShortMeterCheck" ref={checkBoxRef} />
         <p className="checkbox__text">Короткометражки</p>
       </label>
     </form>
