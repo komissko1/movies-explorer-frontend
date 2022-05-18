@@ -1,5 +1,5 @@
 const apiConfig = {
-  baseUrl: "http://localhost:3002",
+  baseUrl: "https://api.movies-explorer.kkom.nomoredomains.work",
 };
 
 class Api {
@@ -34,13 +34,11 @@ class Api {
         Authorization: `Bearer ${localStorage.getItem("jwt")}`,
       },
       credentials: "include",
-      body: JSON.stringify({
-        movie,
-      }),
+      body: JSON.stringify(movie),
     }).then(this._checkResponse);
   }
 
-  deleteCardData(itemId) {
+  deleteMovieData(itemId) {
     return fetch(`${this._moviesUrl}${itemId}`, {
       method: "DELETE",
       headers: {
@@ -75,31 +73,7 @@ class Api {
       }),
     }).then(this._checkResponse);
   }
-
-  changeCardLikeStatus(itemId, status) {
-    const method = status === true ? "DElETE" : "PUT";
-    return fetch(`${this._moviesUrl}likes/${itemId}`, {
-      method: method,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-      },
-      credentials: "include",
-    }).then(this._checkResponse);
-  }
-
-  patchAvatar(avatarInfo) {
-    return fetch(`${this._userUrl}avatar`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-      },
-      credentials: "include",
-      body: JSON.stringify({ avatar: avatarInfo }),
-    }).then(this._checkResponse);
-  }
 }
 
-const api = new Api(apiConfig);
-export default api;
+const mainApi = new Api(apiConfig);
+export default mainApi;

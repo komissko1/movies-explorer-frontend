@@ -1,28 +1,62 @@
 import React from "react";
-import { CurrentUserContext } from "../../../contexts/CurrentUserContext";
+import mainApi from "../../../utils/MainApi";
 
 function MovieCard(props) {
-  const currentUser = React.useContext(CurrentUserContext);
-  // const isOwn = props.card.owner._id === currentUser._id;
-  // const isSaved = props.card.likes.some((i) => i._id === currentUser._id);
-  // const cardLikeButtonClassName = `place__like-button ${
-    // isSaved ? "" : "place__like-button_inactive"
-  // }`;
 
   function handleSaveClick() {
-    props.onCardSave(props.card);
+    props.savedOnly
+    ? handleCardDelete()
+    : handleCardStateChange()
   }
+
+  function handleCardDelete() {
+    const savedMovies = JSON.parse(localStorage.getItem("savedMovies"));
+    mainApi
+    .deleteMovieData(props.movie._id)
+    .then(() => {
+      const updatedSavedMovies = savedMovies.filter(item => item.id !== props.movie.id);
+      localStorage.setItem("savedMovies", JSON.stringify(updatedSavedMovies));
+    })
+    .catch((err) => console.log(err));
+    props.onSaveClick();
+  }
+
+  async function handleCardStateChange() {
+    const savedMovies = JSON.parse(localStorage.getItem("savedMovies"));
+    if (props.isSaved) {
+      const movieWithId = savedMovies.find((item) => item.id === props.movie.id);
+      await mainApi
+        .deleteMovieData(movieWithId._id)
+        .then(() => {
+          const updatedSavedMovies = savedMovies.filter(
+            (item) => item.id !== props.movie.id
+          );
+          localStorage.setItem("savedMovies", JSON.stringify(updatedSavedMovies));
+        })
+        .catch((err) => console.log(err));
+    } else {
+      await mainApi
+        .postMovieData(props.movie)
+        .then((newMovie) => {
+          savedMovies.push(newMovie);
+          localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
+        })
+        .catch((err) => console.log(err));
+    };
+    props.onSaveClick();
+  }
+
 
   return (
     <div className="card">
       <div className="card__header">
-        <p className="card__title">{props.card.nameRU}</p>
-        <p className="card__length">{`${props.card.duration} минут`}</p>
+        <p className="card__title">{props.movie.nameRU}</p>
+        <p className="card__length">{`${props.movie.duration} минут`}</p>
       </div>
       <img
         className="card__image"
-        src={`https://api.nomoreparties.co${props.card.image.url}`}
-        alt={props.card.image.nameEN}
+        src={`https://api.nomoreparties.co${props.movie.image.url}`}
+        alt={props.movie.image.nameEN}
       />
       <div className="card__bottom">
         <button

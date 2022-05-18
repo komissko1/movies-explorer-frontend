@@ -8,6 +8,7 @@ import { alertText } from "../../utils/utils";
 function Login(props) {
   const [validatedFields, setValidatedFields] = React.useState({});
   const [isFormValid, setIsFormValid] = React.useState(false);
+  const [loginErrorMessage, setLoginErrorMessage] = React.useState("");
   const emailRef = React.useRef();
   const passwordRef = React.useRef();
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ function Login(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoginErrorMessage("");
     if (isFormValid) {
       const fieldsData = {
         email: emailRef.current.value,
@@ -36,7 +38,7 @@ function Login(props) {
             navigate("/movies");
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => setLoginErrorMessage("Ошибка авторизации"));
     }
   };
 
@@ -84,6 +86,7 @@ function Login(props) {
             {validatedFields.password === false ? alertText.password : ""}
           </span>
         </label>
+        <p className="form__update-result">{loginErrorMessage}</p>
       </Form>
       <p className="form__bottom-text">
         Еще не зарегистрированы?{" "}

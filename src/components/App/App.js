@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Navigate,
   Route,
   Routes,
   useLocation,
@@ -37,7 +36,7 @@ function App() {
       auth.getToken(jwt).then((res) => {
         if (res) {
           handleLogin(res);
-          navigate(path);
+          path === ("/signin" || "/signup") ? navigate("/") : navigate(path);
         }
       });
     }
@@ -66,25 +65,12 @@ function App() {
     setPopupMenuState(!popupMenuState);
   }
 
-  function handleCardSave(card) {
-    const isSaved = card.likes.some((i) => i._id === currentUser._id);
-    // api
-    //   .changeCardLikeStatus(card._id, isLiked)
-    //   .then((newCard) => {
-    //     setCards((cards) =>
-    //       cards.map((c) => (c._id === card._id ? newCard : c))
-    //     );
-    //   })
-    // .catch((err) => console.log(err));
-  }
-
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="root__container">
         <Routes>
           <Route path="/signin" element={<Login onLogin={handleLogin} />} />
           <Route path="/signup" element={<Register />} />
-          <Route path="/404" element={<PageNotFound />} />
           <Route
             path="/"
             element={
@@ -104,7 +90,7 @@ function App() {
             element={
               <ProtectedRoute loggedIn={isLoggedIn}>
                 <Header loggedIn={isLoggedIn} onClick={handleMenuClick} />
-                <Movies onCardSave={handleCardSave} />
+                <Movies />
                 <Footer />
               </ProtectedRoute>
             }
@@ -124,11 +110,19 @@ function App() {
             element={
               <ProtectedRoute loggedIn={isLoggedIn}>
                 <Header loggedIn={isLoggedIn} onClick={handleMenuClick} />
-                <Profile onLogout={handleLogout} onUserUpdate={handleUpdateUser}/>
+                <Profile
+                  onLogout={handleLogout}
+                  onUserUpdate={handleUpdateUser}
+                />
               </ProtectedRoute>
             }
           />
-          <Route path="*" element={<Navigate to="/404" />} />
+          <Route
+            path="*"
+            element={
+              <PageNotFound onReturn={() => navigate(-1)}/>
+            }
+          />
         </Routes>
         <PopupMenu isOpen={popupMenuState} onClose={closePopup} />
       </div>

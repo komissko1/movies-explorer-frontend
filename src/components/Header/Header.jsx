@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import logoPath from "../../images/logo.svg";
 import navButton from "../../images/navTabButton.svg";
 import navButton_bluemode from "../../images/navTabButton_bluemode.svg";
@@ -39,20 +39,24 @@ function Header(props) {
           <>
             <Navigation>
               <li className="link-effect">
-                <Link
+                <NavLink
                   to="/movies"
-                  className={`navBar__link ${props.mode ? props.mode : ""}`}
+                  className={({isActive}) => isActive
+                  ? `navBar__link navBar__link_active ${props.mode ? props.mode : ""}`
+                  : `navBar__link ${props.mode ? props.mode : ""}`}
                 >
                   Фильмы
-                </Link>
+                </NavLink>
               </li>
               <li className="link-effect">
-                <Link
+                <NavLink
                   to="/saved-movies"
-                  className={`navBar__link ${props.mode ? props.mode : ""}`}
+                  className={({isActive}) => isActive
+                  ? `navBar__link navBar__link_active ${props.mode ? props.mode : ""}`
+                  : `navBar__link ${props.mode ? props.mode : ""}`}
                 >
                   Сохраненные фильмы
-                </Link>
+                </NavLink>
               </li>
             </Navigation>
             <Link to="/profile" className="header__account link-effect">

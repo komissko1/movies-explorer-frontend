@@ -3,77 +3,67 @@ import SearchForm from "../SearchForm/SearchForm";
 import Preloader from "../../Preloader/Preloader";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import mainApi from "../../../utils/MainApi";
-import {messageText} from "../../../utils/utils"
+import { messageText } from "../../../utils/utils";
+import { CurrentUserContext } from "../../../contexts/CurrentUserContext";
 
-
-function SavedMovies() {
+function SavedMovies(props) {
+  const currentUser = React.useContext(CurrentUserContext);
   const [isSearching, setIsSearching] = React.useState(false);
-  const [isMoreButtonVisible, setIsMoreButtonVisible] = React.useState(false);
   const [movies, setMovies] = React.useState([]);
   const [message, setMessage] = React.useState("");
-  const cardsCount = React.useRef();
 
   React.useEffect(() => {
     Promise.resolve(mainApi.getMoviesData())
-    .then((moviesData) =>
-      localStorage.setItem("savedMovies", JSON.stringify(moviesData))
-    )
-    .catch((err) => setMessage(messageText.searchError));
+      .then((moviesData) => {
+        const savedMovies = moviesData.filter(item => item.owner._id === currentUser._id);
+        localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
+        const renderedMovies = savedMovies.map((item)=> {return {movie: item, isSaved: true}})
+        setMovies(renderedMovies);
+      })
+      .catch((err) => setMessage(messageText.searchError));
   }, []);
-
-  async function renderCards() {
-    const searchResult = JSON.parse(localStorage.getItem("searchResult"));
-    searchResult.length === 0 ? setMessage(messageText.notFound) : setMessage("");
-    cardsCount.current = countRenderedCards();
-    await setMovies(searchResult.slice(0, cardsCount.current));
-    cardsCount.current < searchResult.length
-      ? setIsMoreButtonVisible(true)
-      : setIsMoreButtonVisible(false);
-  }
-
-  function countRenderedCards() {
-    const grid = document.getElementById("gridMovies");
-    const columns = window
-      .getComputedStyle(grid)
-      .getPropertyValue("grid-template-columns");
-    const columnsNumber = columns.split(" ").length;
-    switch (columnsNumber) {
-      case 3:
-        return cardsCount.current === 0 ? 12 : (cardsCount.current + 3);
-      case 2:
-        return cardsCount.current === 0 ? 8 : (cardsCount.current + 2);
-      default:
-        return cardsCount.current === 0 ? 5 : (cardsCount.current + 2);
-    }
-  }
 
   async function handleSearchRequest(searchString, checkBoxState) {
     setIsSearching(true);
-    const allMovies = JSON.parse(localStorage.getItem("allMovies"));
+    const savedMovies = JSON.parse(localStorage.getItem("savedMovies"));
     await Promise.resolve(
-      allMovies
+      savedMovies
         .filter((item) => (checkBoxState ? item.duration <= 40 : true))
-        .filter((item) => item.nameRU.includes(searchString))
+        .filter((item) => item.nameRU.toLowerCase().includes(searchString))
     )
       .then((data) => {
-        localStorage.setItem("searchString", searchString);
-        localStorage.setItem("checkBoxState", checkBoxState);
-        localStorage.setItem("searchResult", JSON.stringify(data));
+        data.length === 0 ? setMessage(messageText.notFound) : setMessage("");
+        setMovies(data.map((movie) => {
+          return {movie: movie, isSaved: true};
+        }));
       })
       .catch((err) => setMessage(messageText.searchError))
       .finally(() => setIsSearching(false));
-    cardsCount.current = 0;
-    renderCards();
   }
 
+  function handleSaveClick() {
+    const savedMovies = JSON.parse(localStorage.getItem("savedMovies"));
+    const updatedCardsData = savedMovies.map((movie) => {
+      return {movie: movie, isSaved: true};
+    });
+    setMovies(updatedCardsData);
+  }
 
   return (
     <div className="movies">
-      <SearchForm />
-      <Preloader />
-      <MoviesCardList savedOnly={true}/>
+      <SearchForm onSearchRequest={handleSearchRequest} savedOnly={true} />
+      {isSearching ? (
+        <Preloader />
+      ) : (
+        <p className="cardList__filler">{message}</p>
+      )}
+      <MoviesCardList
+        movies={movies}
+        onSaveClick={handleSaveClick}
+        isMoreButtonVisible={false}
+      />
     </div>
-  )
+  );
 }
 
-export default SavedMovies
+export default SavedMovies;

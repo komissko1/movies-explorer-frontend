@@ -6,9 +6,10 @@ function SearchForm(props) {
   const checkBoxRef = React.useRef();
 
   React.useEffect(() => {
+    if (props.savedOnly) return;
     if (localStorage.getItem("searchString")) {
       movieRef.current.value = localStorage.getItem("searchString");
-      checkBoxRef.current.checked = localStorage.getItem("checkBoxState");
+      checkBoxRef.current.checked = localStorage.getItem("checkBoxState") === "false" ? false : true ;
     }
   }, []);
 
@@ -26,7 +27,7 @@ function SearchForm(props) {
     e.preventDefault();
     if (e.target.closest("form").checkValidity())
       props.onSearchRequest(
-        movieRef.current.value,
+        movieRef.current.value.toLowerCase(),
         checkBoxRef.current.checked
       );
   }
@@ -51,7 +52,7 @@ function SearchForm(props) {
         <span className="search__input-error">{alertMessage}</span>
       </label>
       <label className="checkbox">
-        <input type="checkbox" id="ShortMeterCheck" ref={checkBoxRef} />
+        <input type="checkbox" id="ShortMeterCheck" ref={checkBoxRef}/>
         <p className="checkbox__text">Короткометражки</p>
       </label>
     </form>

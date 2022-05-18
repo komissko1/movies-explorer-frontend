@@ -4,9 +4,11 @@ import Preloader from "../Preloader/Preloader";
 import MoviesCardList from "./MoviesCardList/MoviesCardList";
 import moviesApi from "../../utils/MoviesApi";
 import mainApi from "../../utils/MainApi";
-import {messageText} from "../../utils/utils"
+import { messageText } from "../../utils/utils";
+import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
-function Movies(props) {
+function Movies() {
+  const currentUser = React.useContext(CurrentUserContext);
   const [isSearching, setIsSearching] = React.useState(false);
   const [isMoreButtonVisible, setIsMoreButtonVisible] = React.useState(false);
   const [movies, setMovies] = React.useState([]);
@@ -15,19 +17,49 @@ function Movies(props) {
 
   React.useEffect(() => {
     cardsCount.current = 0;
+    mainApi
+      .getMoviesData()
+      .then((data) => {
+        const savedMovies = data.filter(
+          (item) => item.owner._id === currentUser._id
+        );
+        localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
+      })
+      .catch((err) => console.log(err));
     localStorage.getItem("searchResult") === null
-    ? setMessage(messageText.startSearch)
-    : renderCards();
+      ? setMessage(messageText.startSearch)
+      : renderCards();
   }, []);
 
   async function renderCards() {
     const searchResult = JSON.parse(localStorage.getItem("searchResult"));
-    searchResult.length === 0 ? setMessage(messageText.notFound) : setMessage("");
+    const savedMovies = JSON.parse(localStorage.getItem("savedMovies"));
+    searchResult.length === 0
+      ? setMessage(messageText.notFound)
+      : setMessage("");
     cardsCount.current = countRenderedCards();
-    await setMovies(searchResult.slice(0, cardsCount.current));
+    const renderedCards = searchResult.slice(0, cardsCount.current);
+    const fullCardsData = renderedCards.map((movie) => {
+      const isSaved = savedMovies.some((item) => item.id === movie.id)
+        ? true
+        : false;
+      return { movie, isSaved };
+    });
+    await setMovies(fullCardsData);
     cardsCount.current < searchResult.length
       ? setIsMoreButtonVisible(true)
       : setIsMoreButtonVisible(false);
+  }
+
+  async function updateRender() {
+    const savedMovies = JSON.parse(localStorage.getItem("savedMovies"));
+    const updatedCardsData = movies.map((movieKeyPare) => {
+      movieKeyPare.isSaved = savedMovies.some((item) => item.id === movieKeyPare.movie.id)
+        ? true
+        : false;
+      return movieKeyPare;
+    });
+    await setMovies(updatedCardsData);
   }
 
   function countRenderedCards() {
@@ -38,11 +70,11 @@ function Movies(props) {
     const columnsNumber = columns.split(" ").length;
     switch (columnsNumber) {
       case 3:
-        return cardsCount.current === 0 ? 12 : (cardsCount.current + 3);
+        return cardsCount.current === 0 ? 12 : cardsCount.current + 3;
       case 2:
-        return cardsCount.current === 0 ? 8 : (cardsCount.current + 2);
+        return cardsCount.current === 0 ? 8 : cardsCount.current + 2;
       default:
-        return cardsCount.current === 0 ? 5 : (cardsCount.current + 2);
+        return cardsCount.current === 0 ? 5 : cardsCount.current + 2;
     }
   }
 
@@ -58,7 +90,7 @@ function Movies(props) {
     await Promise.resolve(
       allMovies
         .filter((item) => (checkBoxState ? item.duration <= 40 : true))
-        .filter((item) => item.nameRU.includes(searchString))
+        .filter((item) => item.nameRU.toLowerCase().includes(searchString))
     )
       .then((data) => {
         localStorage.setItem("searchString", searchString);
@@ -81,8 +113,8 @@ function Movies(props) {
       )}
       <MoviesCardList
         movies={movies}
-        onClick={renderCards}
-        onCardSave={props.onCardSave}
+        onSaveClick={updateRender}
+        onMoreButtonClick={renderCards}
         isMoreButtonVisible={isMoreButtonVisible}
       />
     </div>

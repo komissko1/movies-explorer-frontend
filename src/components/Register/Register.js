@@ -8,6 +8,7 @@ import { alertText } from "../../utils/utils";
 function Register() {
   const [validatedFields, setValidatedFields] = React.useState({});
   const [isFormValid, setIsFormValid] = React.useState(false);
+  const [signupErrorMessage, setSignupErrorMessage] = React.useState("");
   const nameRef = React.useRef();
   const emailRef = React.useRef();
   const passwordRef = React.useRef();
@@ -21,6 +22,7 @@ function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setSignupErrorMessage("");
     if (isFormValid) {
       const fieldsData = {
         name: nameRef.current.value,
@@ -34,7 +36,7 @@ function Register() {
             navigate("/signin");
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => setSignupErrorMessage("Ошибка сервера"));
     }
   };
 
@@ -99,6 +101,7 @@ function Register() {
           {validatedFields.password === false ? alertText.password : ""}
           </span>
         </label>
+        <p className="form__update-result">{signupErrorMessage}</p>
       </Form>
       <p className="form__bottom-text">
         Уже зарегистрированы?{" "}

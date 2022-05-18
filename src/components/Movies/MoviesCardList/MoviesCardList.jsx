@@ -8,11 +8,11 @@ function MoviesCardList(props) {
       <section className="cardList" id="gridMovies" aria-label="Films">
         {props.movies.map((item) => (
           <MovieCard
-            card={item}
+            movie={item.movie}
             isSaved={item.isSaved}
             savedOnly={props.savedOnly}
-            key={item.id}
-            onCardSave={props.onCardSave}
+            key={item.movie.id}
+            onSaveClick={props.onSaveClick}
           />
         ))}
       </section>
@@ -23,7 +23,7 @@ function MoviesCardList(props) {
             className={`cardList__button ${
               props.isMoreButtonVisible ? "" : "cardList__button_invisible"
             }`}
-            onClick={props.onClick}
+            onClick={props.onMoreButtonClick}
           >
             Ещё
           </button>

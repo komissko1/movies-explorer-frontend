@@ -21,6 +21,7 @@ function Profile(props) {
   }, []);
 
   const handleFieldChange = (e) => {
+    setUpdateMessage("");
     const validatedKeyPare = { [e.target.id]: e.target.checkValidity() };
     setValidatedFields({ ...validatedFields, ...validatedKeyPare });
     setIsFormValid(e.target.closest("form").checkValidity());
@@ -83,7 +84,7 @@ function Profile(props) {
           <span className="form__input-error" id="email-alert">
             {validatedFields.email === false ? alertText.email : ""}
           </span>
-          <p className="profile__update-result">{updateMessage}</p>
+          <p className="form__update-result">{updateMessage}</p>
         </div>
       </Form>
       <Link
