@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://localhost:3002';
+export const BASE_URL = 'https://api.movies-explorer.kkom.nomoredomains.work';
 
 export const register = ({name, email, password }) => {
   return fetch(`${BASE_URL}/signup`, {
