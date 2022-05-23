@@ -1,5 +1,5 @@
 const apiConfig = {
-  baseUrl: "https://api.movies-explorer.kkom.nomoredomains.work",
+  baseUrl: "http://localhost:3002",
 };
 
 class Api {
