@@ -1,7 +1,9 @@
 import React from "react";
+import { alertText } from "../../../utils/utils";
 
 function SearchForm(props) {
   const [alertMessage, setAlertMessage] = React.useState("");
+  const [isFormValid, setIsFormValid] = React.useState(false);
   const movieRef = React.useRef();
   const checkBoxRef = React.useRef();
 
@@ -14,20 +16,20 @@ function SearchForm(props) {
   }, []);
 
   const handleFieldChange = (e) => {
-    if (movieRef.current.value === "") {
-      setAlertMessage("Нужно ввести ключевое слово");
+    if (movieRef.current.value.trim() === "") {
+      setAlertMessage(alertText.searchIsEmpty);
+      setIsFormValid(false)
     } else {
-      e.target.checkValidity()
-        ? setAlertMessage("")
-        : setAlertMessage("Строка поиска содержит менее трех символов");
+      setAlertMessage("")
+      setIsFormValid(true)
     }
   };
 
-  function handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (e.target.closest("form").checkValidity())
+    if (isFormValid)
       props.onSearchRequest(
-        movieRef.current.value.toLowerCase(),
+        movieRef.current.value.toLowerCase().trim(),
         checkBoxRef.current.checked
       );
   }
@@ -39,8 +41,6 @@ function SearchForm(props) {
           className="search__input"
           type="text"
           id="movie"
-          minLength="3"
-          maxLength="50"
           placeholder="Фильм"
           required
           onChange={handleFieldChange}
@@ -52,7 +52,7 @@ function SearchForm(props) {
         <span className="search__input-error">{alertMessage}</span>
       </label>
       <label className="checkbox">
-        <input type="checkbox" id="ShortMeterCheck" ref={checkBoxRef}/>
+        <input type="checkbox" id="ShortMeterCheck" ref={checkBoxRef} />
         <p className="checkbox__text">Короткометражки</p>
       </label>
     </form>

@@ -25,6 +25,7 @@ function SavedMovies(props) {
 
   async function handleSearchRequest(searchString, checkBoxState) {
     setIsSearching(true);
+    console.log(searchString, checkBoxState);
     const savedMovies = JSON.parse(localStorage.getItem("savedMovies"));
     await Promise.resolve(
       savedMovies
@@ -32,6 +33,7 @@ function SavedMovies(props) {
         .filter((item) => item.nameRU.toLowerCase().includes(searchString))
     )
       .then((data) => {
+        console.log(data);
         data.length === 0 ? setMessage(messageText.notFound) : setMessage("");
         setMovies(data.map((movie) => {
           return {movie: movie, isSaved: true};
@@ -59,6 +61,7 @@ function SavedMovies(props) {
       )}
       <MoviesCardList
         movies={movies}
+        savedOnly={true}
         onSaveClick={handleSaveClick}
         isMoreButtonVisible={false}
       />

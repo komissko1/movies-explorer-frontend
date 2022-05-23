@@ -32,8 +32,7 @@ function App() {
 
   const handleTockenCheck = (path) => {
     if (localStorage.getItem("jwt")) {
-      const jwt = localStorage.getItem("jwt");
-      auth.getToken(jwt).then((res) => {
+      auth.getToken().then((res) => {
         if (res) {
           handleLogin(res);
           path === ("/signin" || "/signup") ? navigate("/") : navigate(path);
@@ -42,9 +41,28 @@ function App() {
     }
   };
 
-  const handleLogin = (user) => {
-    setIsLoggedIn(true);
-    setCurrentUser(user);
+  const handleSignup = ({ name, email, password }) => {
+    auth
+      .register({ name, email, password })
+      .then((res) => {
+          navigate("/signin")
+          handleLogin({ email, password });
+        }
+      )
+      .catch(() => setIsSignupError(true));
+  };
+
+  const handleLogin = ({ email, password }) => {
+    auth
+      .authorize(email, password)
+      .then((res) => {
+          localStorage.setItem("jwt", res.user._id);
+          setCurrentUser(res.user);
+          setIsLoggedIn(true);
+          navigate("/movies");
+        }
+      )
+      .catch(() => setIsLoginError(true));
   };
 
   const handleLogout = () => {

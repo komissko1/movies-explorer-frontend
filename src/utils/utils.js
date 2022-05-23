@@ -6,6 +6,7 @@ export const messageText = {
 };
 
 export const alertText = {
+  searchIsEmpty: "Нужно ввести ключевое слово",
   name: "Введите значение от 3 до 50 символов",
   email: "Значение не соответствует адресу e-mail",
   password: "Значение должно состоять из латинских символов, цифр и спецсимволов",

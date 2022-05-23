@@ -20,10 +20,12 @@ function Movies() {
     mainApi
       .getMoviesData()
       .then((data) => {
-        const savedMovies = data.filter(
-          (item) => item.owner._id === currentUser._id
-        );
-        localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
+        if (data) {
+          const savedMovies = data.filter(
+            (item) => item.owner._id === currentUser._id
+          );
+          localStorage.setItem("savedMovies", JSON.stringify(savedMovies));
+        }
       })
       .catch((err) => console.log(err));
     localStorage.getItem("searchResult") === null
@@ -54,7 +56,9 @@ function Movies() {
   async function updateRender() {
     const savedMovies = JSON.parse(localStorage.getItem("savedMovies"));
     const updatedCardsData = movies.map((movieKeyPare) => {
-      movieKeyPare.isSaved = savedMovies.some((item) => item.id === movieKeyPare.movie.id)
+      movieKeyPare.isSaved = savedMovies.some(
+        (item) => item.id === movieKeyPare.movie.id
+      )
         ? true
         : false;
       return movieKeyPare;
@@ -113,6 +117,7 @@ function Movies() {
       )}
       <MoviesCardList
         movies={movies}
+        savedOnly={false}
         onSaveClick={updateRender}
         onMoreButtonClick={renderCards}
         isMoreButtonVisible={isMoreButtonVisible}

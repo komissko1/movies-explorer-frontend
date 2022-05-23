@@ -63,6 +63,8 @@ function Login(props) {
             required
             ref={emailRef}
             onChange={handleFieldChange}
+            pattern="[a-zA-Z0-9._%+-]+\x40[a-zA-Z0-9.-]+\x2E[a-zA-Z]{2,}"
+
           />
           <span className="form__input-error" id="email-alert">
             {validatedFields.email === false ? alertText.email : ""}
