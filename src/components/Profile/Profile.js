@@ -24,7 +24,14 @@ function Profile(props) {
   const handleFieldChange = (e) => {
     const validatedKeyPare = { [e.target.id]: e.target.checkValidity() };
     setValidatedFields({ ...validatedFields, ...validatedKeyPare });
-    setIsFormValid(e.target.closest("form").checkValidity());
+    if (
+      nameRef.current.value === currentUser.name &&
+      emailRef.current.value === currentUser.email
+    ) {
+      setIsFormValid(false);
+    } else {
+      setIsFormValid(e.target.closest("form").checkValidity());
+    }
   };
 
   const handleSubmit = (e) => {

@@ -31,8 +31,7 @@ function App() {
 
   const handleTockenCheck = (path) => {
     if (localStorage.getItem("jwt")) {
-      const jwt = localStorage.getItem("jwt");
-      auth.getToken(jwt).then((res) => {
+      auth.getToken().then((res) => {
         if (res) {
           setCurrentUser(res);
           setIsLoggedIn(true);
@@ -46,7 +45,8 @@ function App() {
     auth
       .register({ name, email, password })
       .then((res) => {
-          navigate("/signin");
+          navigate("/signin")
+          handleLogin({ email, password });
         }
       )
       .catch(() => setIsSignupError(true));
