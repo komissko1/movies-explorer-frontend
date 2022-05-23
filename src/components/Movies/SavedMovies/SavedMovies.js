@@ -33,7 +33,6 @@ function SavedMovies(props) {
         .filter((item) => item.nameRU.toLowerCase().includes(searchString))
     )
       .then((data) => {
-        console.log(data);
         data.length === 0 ? setMessage(messageText.notFound) : setMessage("");
         setMovies(data.map((movie) => {
           return {movie: movie, isSaved: true};
