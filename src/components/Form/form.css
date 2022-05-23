@@ -74,11 +74,7 @@
     color: #FF0000;
   }
 
-  .form__input-error_disabled {
-    visibility: hidden;
-  }
-
-  .form__submit-result {
+  .form__update-result {
     padding: 0;
     margin: 0;
     font-size: 16px;
@@ -86,10 +82,6 @@
     text-align: center;
     color: #FF6838;
     font-weight: 500;
-  }
-
-  .form__submit-result_disabled {
-    visibility: hidden;
   }
 
 .form__save-button {
