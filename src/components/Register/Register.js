@@ -1,42 +1,40 @@
-import React, { useEffect } from "react";
-import * as auth from "../../utils/auth";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 import logoPath from "../../images/logo.svg";
 import Form from "../Form/Form";
 import { alertText } from "../../utils/utils";
 
-function Register() {
-  const [validatedFields, setValidatedFields] = React.useState({});
+function Register(props) {
+  const [validatedFields, setValidatedFields] = React.useState({
+    name: true,
+    email: true,
+    password: true,
+  });
   const [isFormValid, setIsFormValid] = React.useState(false);
-  const [signupErrorMessage, setSignupErrorMessage] = React.useState("");
   const nameRef = React.useRef();
   const emailRef = React.useRef();
   const passwordRef = React.useRef();
-  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    nameRef.current.value = "";
+    emailRef.current.value = "";
+    passwordRef.current.value = "";
+  }, []);
 
   const handleFieldChange = (e) => {
-    const validatedKeyPare = {[e.target.id]: e.target.checkValidity() };
+    const validatedKeyPare = { [e.target.id]: e.target.checkValidity() };
     setValidatedFields({ ...validatedFields, ...validatedKeyPare });
     setIsFormValid(e.target.closest("form").checkValidity());
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setSignupErrorMessage("");
     if (isFormValid) {
-      const fieldsData = {
+      props.onSignup({
         name: nameRef.current.value,
         email: emailRef.current.value,
         password: passwordRef.current.value,
-      };
-      auth
-        .register(fieldsData)
-        .then((res) => {
-          if (res.email) {
-            navigate("/signin");
-          }
-        })
-        .catch((err) => setSignupErrorMessage("Ошибка сервера"));
+      });
     }
   };
 
@@ -64,8 +62,13 @@ function Register() {
             ref={nameRef}
             onChange={handleFieldChange}
           />
-          <span className="form__input-error" id="name-alert">
-            {validatedFields.name === false ? alertText.name : ""}
+          <span
+            className={`form__input-error ${
+              validatedFields.name ? "form__input-error_disabled" : ""
+            }`}
+            id="name-alert"
+          >
+            {alertText.name}
           </span>
         </label>
         <label>
@@ -79,8 +82,13 @@ function Register() {
             ref={emailRef}
             onChange={handleFieldChange}
           />
-          <span className="form__input-error" id="email-alert">
-          {validatedFields.email === false ? alertText.email : ""}
+          <span
+            className={`form__input-error ${
+              validatedFields.email ? "form__input-error_disabled" : ""
+            }`}
+            id="email-alert"
+          >
+            {alertText.email}
           </span>
         </label>
         <label>
@@ -97,11 +105,22 @@ function Register() {
             pattern="^[\w!@#\x26()$\x22{%}:;',?*~$^+=<>].*"
             onChange={handleFieldChange}
           />
-          <span className="form__input-error" id="password-alert">
-          {validatedFields.password === false ? alertText.password : ""}
+          <span
+            className={`form__input-error ${
+              validatedFields.password ? "form__input-error_disabled" : ""
+            }`}
+            id="password-alert"
+          >
+            {alertText.password}
           </span>
         </label>
-        <p className="form__update-result">{signupErrorMessage}</p>
+        <p
+          className={`form__submit-result ${
+            props.onSignupError ? "" : "form__submit-result_disabled"
+          }`}
+        >
+          {alertText.serverError}
+        </p>
       </Form>
       <p className="form__bottom-text">
         Уже зарегистрированы?{" "}
