@@ -1,17 +1,23 @@
 import React from "react";
-import * as auth from "../../utils/auth";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import validator from "validator";
 import logoPath from "../../images/logo.svg";
 import Form from "../Form/Form";
 import { alertText } from "../../utils/utils";
 
 function Login(props) {
-  const [validatedFields, setValidatedFields] = React.useState({});
+  const [validatedFields, setValidatedFields] = React.useState({
+    email: true,
+    password: true,
+  });
   const [isFormValid, setIsFormValid] = React.useState(false);
-  const [loginErrorMessage, setLoginErrorMessage] = React.useState("");
   const emailRef = React.useRef();
   const passwordRef = React.useRef();
-  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    emailRef.current.value = "";
+    passwordRef.current.value = "";
+  }, []);
 
   const handleFieldChange = (e) => {
     const validatedKeyPare = { [e.target.id]: e.target.checkValidity() };
@@ -21,24 +27,11 @@ function Login(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoginErrorMessage("");
     if (isFormValid) {
-      const fieldsData = {
+      props.onLogin({
         email: emailRef.current.value,
         password: passwordRef.current.value,
-      };
-      auth
-        .authorize(fieldsData)
-        .then((res) => {
-          if (res.user._id) {
-            localStorage.setItem("jwt", res.user._id);
-            props.onLogin(res.user);
-            passwordRef.current.value = "";
-            emailRef.current.value = "";
-            navigate("/movies");
-          }
-        })
-        .catch((err) => setLoginErrorMessage("Ошибка авторизации"));
+      });
     }
   };
 
@@ -66,8 +59,13 @@ function Login(props) {
             pattern="[a-zA-Z0-9._%+-]+\x40[a-zA-Z0-9.-]+\x2E[a-zA-Z]{2,}"
 
           />
-          <span className="form__input-error" id="email-alert">
-            {validatedFields.email === false ? alertText.email : ""}
+          <span
+            className={`form__input-error ${
+              validatedFields.email ? "form__input-error_disabled" : ""
+            }`}
+            id="email-alert"
+          >
+            {alertText.email}
           </span>
         </label>
         <label>
@@ -84,11 +82,22 @@ function Login(props) {
             pattern="^[\w!@#\x26()$\x22{%}:;',?*~$^+=<>].*"
             onChange={handleFieldChange}
           />
-          <span className="form__input-error" id="password-alert">
-            {validatedFields.password === false ? alertText.password : ""}
+          <span
+            className={`form__input-error ${
+              validatedFields.password ? "form__input-error_disabled" : ""
+            }`}
+            id="password-alert"
+          >
+            {alertText.password}
           </span>
         </label>
-        <p className="form__update-result">{loginErrorMessage}</p>
+        <p
+          className={`form__submit-result ${
+            props.onLoginError ? "" : "form__submit-result_disabled"
+          }`}
+        >
+          {alertText.authorizationError}
+        </p>
       </Form>
       <p className="form__bottom-text">
         Еще не зарегистрированы?{" "}
