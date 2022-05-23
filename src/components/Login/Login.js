@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import validator from "validator";
 import logoPath from "../../images/logo.svg";
 import Form from "../Form/Form";
 import { alertText } from "../../utils/utils";

@@ -6,7 +6,7 @@ import mainApi from "../../../utils/MainApi";
 import { messageText } from "../../../utils/utils";
 import { CurrentUserContext } from "../../../contexts/CurrentUserContext";
 
-function SavedMovies(props) {
+function SavedMovies() {
   const currentUser = React.useContext(CurrentUserContext);
   const [isSearching, setIsSearching] = React.useState(false);
   const [movies, setMovies] = React.useState([]);
