@@ -1,0 +1,15 @@
+module.exports = function windowResizer() {
+    var resizeTimer;
+    var windowSize;
+    window.onresize = function () {
+      if (resizeTimer) {
+        clearTimeout(resizeTimer);
+      }
+      resizeTimer = setTimeout(function () {
+        windowSize = window.innerWidth;
+        resizeTimer = null;
+      }, 500);
+    };
+    return windowSize;
+  }
+

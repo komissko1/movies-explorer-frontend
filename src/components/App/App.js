@@ -1,5 +1,10 @@
 import React from "react";
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import {
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import Login from "../Login/Login";
 import Register from "../Register/Register";
 import PageNotFound from "../PageNotFound/PageNotFound";
@@ -12,16 +17,12 @@ import Footer from "../Footer/Footer";
 import PopupMenu from "../PopupMenu/PopupMenu";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import * as auth from "../../utils/auth";
-import api from "../../utils/MainApi"
 import { CurrentUserContext } from "../../contexts/CurrentUserContext.js";
 
 function App() {
   const [currentUser, setCurrentUser] = React.useState({});
   const [popupMenuState, setPopupMenuState] = React.useState(false);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-  const [isLoginError, setIsLoginError] = React.useState(false);
-  const [isSignupError, setIsSignupError] = React.useState(false);
-  const [isProfileUpdateError, setIsProfileUpdateError] = React.useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -34,35 +35,16 @@ function App() {
       const jwt = localStorage.getItem("jwt");
       auth.getToken(jwt).then((res) => {
         if (res) {
-          setCurrentUser(res);
-          setIsLoggedIn(true);
+          handleLogin(res);
           path === ("/signin" || "/signup") ? navigate("/") : navigate(path);
         }
       });
     }
   };
 
-  const handleSignup = ({ name, email, password }) => {
-    auth
-      .register({ name, email, password })
-      .then((res) => {
-          navigate("/signin");
-        }
-      )
-      .catch(() => setIsSignupError(true));
-  };
-
-  const handleLogin = ({ email, password }) => {
-    auth
-      .authorize(email, password)
-      .then((res) => {
-          localStorage.setItem("jwt", res.user._id);
-          setCurrentUser(res.user);
-          setIsLoggedIn(true);
-          navigate("/movies");
-        }
-      )
-      .catch(() => setIsLoginError(true));
+  const handleLogin = (user) => {
+    setIsLoggedIn(true);
+    setCurrentUser(user);
   };
 
   const handleLogout = () => {
@@ -71,13 +53,8 @@ function App() {
     setIsLoggedIn(false);
   };
 
-  function handleUpdateUser({ name, email }) {
-    api
-      .patchUserData({ name, email })
-      .then((userData) => {
-        setCurrentUser(userData);
-      })
-      .catch(() => setIsProfileUpdateError(true));
+  function handleUpdateUser(userData) {
+    setCurrentUser(userData);
   }
 
   function handleMenuClick() {
@@ -92,18 +69,8 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="root__container">
         <Routes>
-          <Route
-            path="/signin"
-            element={
-              <Login onLogin={handleLogin} onLoginError={isLoginError} />
-            }
-          />
-          <Route
-            path="/signup"
-            element={
-              <Register onSignup={handleSignup} onSignupError={isSignupError} />
-            }
-          />
+          <Route path="/signin" element={<Login onLogin={handleLogin} />} />
+          <Route path="/signup" element={<Register />} />
           <Route
             path="/"
             element={
@@ -146,14 +113,15 @@ function App() {
                 <Profile
                   onLogout={handleLogout}
                   onUserUpdate={handleUpdateUser}
-                  onUpdateError={isProfileUpdateError}
                 />
               </ProtectedRoute>
             }
           />
           <Route
             path="*"
-            element={<PageNotFound onReturn={() => navigate(-1)} />}
+            element={
+              <PageNotFound onReturn={() => navigate(-1)}/>
+            }
           />
         </Routes>
         <PopupMenu isOpen={popupMenuState} onClose={closePopup} />
