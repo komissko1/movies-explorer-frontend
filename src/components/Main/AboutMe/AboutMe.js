@@ -1,5 +1,4 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
 import myFoto from "../../../images/myFoto.png";
 
 function AboutMe() {

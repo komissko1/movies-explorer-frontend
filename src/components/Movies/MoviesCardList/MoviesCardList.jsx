@@ -1,43 +1,36 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import MovieCard from "../MovieCard/MovieCard";
-import cardList from "../../../utils/cardList";
 
 function MoviesCardList(props) {
+
   return (
     <>
-      <section className="cardList" aria-label="Фильмы">
-        {props.savedOnly
-          ? cardList
-              .filter((item) => item.isSaved)
-              .map((item) => (
-                <MovieCard
-                  title={item.title}
-                  length={item.length}
-                  image={item.image}
-                  isSaved={item.isSaved}
-                  savedOnly={props.savedOnly}
-                />
-              ))
-          : cardList.map((item) => (
-              <MovieCard
-                title={item.title}
-                length={item.length}
-                image={item.image}
-                isSaved={item.isSaved}
-              />
-            ))}
+      <section className="cardList" id="gridMovies" aria-label="Films">
+        {props.movies.map((item) => (
+          <MovieCard
+            movie={item.movie}
+            isSaved={item.isSaved}
+            savedOnly={props.savedOnly}
+            key={item.movie.id}
+            onSaveClick={props.onSaveClick}
+          />
+        ))}
       </section>
-      <section className="cardList__addCards">
-        <button
-          type="button"
-          className={`cardList__button ${
-            props.savedOnly ? "cardList__button_invisible" : ""
-          }`}
-        >
-          Ещё
-        </button>
-      </section>
+      {props.movies !== [] ? (
+        <section className="cardList__addCards">
+          <button
+            type="button"
+            className={`cardList__button ${
+              props.isMoreButtonVisible ? "" : "cardList__button_invisible"
+            }`}
+            onClick={props.onMoreButtonClick}
+          >
+            Ещё
+          </button>
+        </section>
+      ) : (
+        ""
+      )}
     </>
   );
 }

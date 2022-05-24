@@ -1,5 +1,4 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
 import promoLogo from "../../../images/landing-logo.svg";
 
 function Promo() {
